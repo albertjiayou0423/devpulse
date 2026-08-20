@@ -9,46 +9,129 @@ import {
   CurrencyDollar,
   ChatCircle,
   Sparkle,
+  Globe,
 } from "@phosphor-icons/react/dist/ssr";
 
-export default function Home() {
+type Release = {
+  tag_name: string;
+  assets: { name: string; browser_download_url: string }[];
+};
+
+async function getLatestRelease(): Promise<Release | null> {
+  try {
+    const res = await fetch(
+      "https://api.github.com/repos/albertjiayou0423/devpulse/releases/latest",
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+type Lang = "en" | "zh";
+
+const translations = {
+  en: {
+    badge: "Now Available",
+    title1: "Your code's",
+    title2: "heartbeat",
+    title3: "always in sight.",
+    subtitle:
+      "DevPulse is a macOS menu bar app that monitors your opencode sessions in real-time. See agent states, token usage, and subagent activity at a glance.",
+    download: "Download DMG",
+    github: "View on GitHub",
+    featuresLabel: "Features",
+    featuresTitle: "Everything you need to monitor your AI workflow",
+    featuresDesc:
+      "DevPulse integrates seamlessly with opencode, providing real-time insights without interrupting your flow.",
+    statusLabel: "Status System",
+    statusTitle: "Know what's happening at a glance",
+    statusDesc:
+      "Every state has a distinct color, making it easy to understand your session's status without reading text.",
+    installLabel: "Installation",
+    installTitle: "Up and running in seconds",
+    installDesc:
+      "Download, drag to Applications, and you're done. No configuration needed.",
+    requirementsLabel: "Requirements",
+    requirementsTitle: "What you'll need",
+    footer: "DevPulse · MIT License · Built with ❤️ for developers",
+  },
+  zh: {
+    badge: "现已发布",
+    title1: "代码的",
+    title2: "心跳",
+    title3: "始终在视线之内。",
+    subtitle:
+      "DevPulse 是一个 macOS 菜单栏应用，实时监控你的 opencode 会话。一眼掌握代理状态、Token 用量和子代理活动。",
+    download: "下载 DMG",
+    github: "在 GitHub 查看",
+    featuresLabel: "功能特性",
+    featuresTitle: "监控 AI 工作流所需的一切",
+    featuresDesc:
+      "DevPulse 与 opencode 无缝集成，提供实时洞察而不打断你的工作流。",
+    statusLabel: "状态系统",
+    statusTitle: "一眼掌握运行状态",
+    statusDesc: "每种状态都有独特的颜色，无需阅读文字即可理解会话状态。",
+    installLabel: "安装",
+    installTitle: "几秒钟即可运行",
+    installDesc: "下载、拖到 Applications，完成。无需配置。",
+    requirementsLabel: "系统要求",
+    requirementsTitle: "你需要",
+    footer: "DevPulse · MIT 许可证 · 用 ❤️ 为开发者构建",
+  },
+};
+
+export default async function Home() {
+  const release = await getLatestRelease();
+  const version = release?.tag_name ?? "v0.1.1";
+  const dmgAsset = release?.assets.find((a) => a.name.endsWith(".dmg"));
+  const downloadUrl =
+    dmgAsset?.browser_download_url ??
+    "https://github.com/albertjiayou0423/devpulse/releases/latest";
+
   return (
     <main className="flex-1">
+      {/* Language Switcher */}
+      <div className="fixed top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
+
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center px-6 py-20 overflow-hidden">
-        {/* Background glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[radial-gradient(ellipse,rgba(255,107,107,0.08)_0%,transparent_70%)] pointer-events-none" />
 
         <div className="max-w-5xl mx-auto w-full relative z-10">
           <Badge className="mb-8" variant="neutral">
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B] animate-pulse" />
-              v0.1.1 — Now Available
+              {version} — {translations.en.badge}
             </span>
           </Badge>
 
           <h1 className="text-5xl md:text-7xl font-serif leading-tight tracking-tight mb-6 max-w-3xl">
-            Your code&apos;s{" "}
+            {translations.en.title1}{" "}
             <span className="italic bg-gradient-to-r from-[#FF6B6B] to-[#FFB347] bg-clip-text text-transparent">
-              heartbeat
+              {translations.en.title2}
             </span>
             ,<br />
-            always in sight.
+            {translations.en.title3}
           </h1>
 
           <p className="text-lg text-[#8a8a9a] max-w-xl mb-10 leading-relaxed">
-            DevPulse is a macOS menu bar app that monitors your opencode sessions in real-time. See agent states, token usage, and subagent activity at a glance.
+            {translations.en.subtitle}
           </p>
 
           <div className="flex gap-4 flex-wrap">
-            <a href="https://github.com/albertjiayou0423/devpulse/releases/latest">
+            <a href={downloadUrl} download>
               <Button variant="primary" size="lg" icon={<Download weight="bold" />}>
-                Download DMG
+                {translations.en.download}
               </Button>
             </a>
             <a href="https://github.com/albertjiayou0423/devpulse">
               <Button variant="secondary" size="lg" icon={<GithubLogo weight="bold" />}>
-                View on GitHub
+                {translations.en.github}
               </Button>
             </a>
           </div>
@@ -72,13 +155,13 @@ export default function Home() {
       <section className="px-6 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-            Features
+            {translations.en.featuresLabel}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif mb-4 max-w-2xl">
-            Everything you need to monitor your AI workflow
+            {translations.en.featuresTitle}
           </h2>
           <p className="text-[#8a8a9a] mb-12 max-w-xl">
-            DevPulse integrates seamlessly with opencode, providing real-time insights without interrupting your flow.
+            {translations.en.featuresDesc}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -121,13 +204,13 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <LayerCard className="p-10 md:p-16">
             <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-              Status System
+              {translations.en.statusLabel}
             </p>
             <h2 className="text-3xl md:text-4xl font-serif mb-4">
-              Know what&apos;s happening at a glance
+              {translations.en.statusTitle}
             </h2>
             <p className="text-[#8a8a9a] mb-10 max-w-xl">
-              Every state has a distinct color, making it easy to understand your session&apos;s status without reading text.
+              {translations.en.statusDesc}
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -145,13 +228,13 @@ export default function Home() {
       <section className="px-6 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-            Installation
+            {translations.en.installLabel}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif mb-4">
-            Up and running in seconds
+            {translations.en.installTitle}
           </h2>
           <p className="text-[#8a8a9a] mb-12 max-w-xl">
-            Download, drag to Applications, and you&apos;re done. No configuration needed.
+            {translations.en.installDesc}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -166,10 +249,10 @@ export default function Home() {
       <section className="px-6 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-            Requirements
+            {translations.en.requirementsLabel}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif mb-10">
-            What you&apos;ll need
+            {translations.en.requirementsTitle}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
@@ -224,11 +307,24 @@ export default function Home() {
             </a>
           </div>
           <p className="text-xs font-mono text-[#5a5a6a] tracking-wide">
-            DevPulse · MIT License · Built with ❤️ for developers
+            {translations.en.footer}
           </p>
         </div>
       </footer>
     </main>
+  );
+}
+
+function LanguageSwitcher() {
+  return (
+    <div className="flex gap-2">
+      <button className="px-3 py-1.5 text-xs font-mono bg-[#1a1a24] border border-[#2a2a36] rounded-lg text-[#FF6B6B] hover:border-[#FF6B6B] transition-colors">
+        EN
+      </button>
+      <button className="px-3 py-1.5 text-xs font-mono bg-[#1a1a24] border border-[#2a2a36] rounded-lg text-[#8a8a9a] hover:border-[#FF6B6B] hover:text-[#FF6B6B] transition-colors">
+        中文
+      </button>
+    </div>
   );
 }
 

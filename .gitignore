@@ -2,6 +2,8 @@
 .build/
 /OpenCodeMonitor
 /OpenCodeMonitor.app/
+/DevPulse
+/DevPulse.app/
 *.dmg
 *.zip
 

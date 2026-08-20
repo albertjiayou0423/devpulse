@@ -4,6 +4,231 @@ import SQLite3
 import QuartzCore
 import ServiceManagement
 
+// MARK: - Localization Manager
+class L10n {
+    static let shared = L10n()
+    
+    enum Language: String {
+        case auto = "auto"
+        case zh = "zh"
+        case en = "en"
+    }
+    
+    var currentLanguage: Language {
+        let saved = SettingsManager.shared.language
+        if saved == "auto" || saved.isEmpty {
+            let systemLang = Locale.preferredLanguages.first ?? "en"
+            return systemLang.hasPrefix("zh") ? .zh : .en
+        }
+        return Language(rawValue: saved) ?? .en
+    }
+    
+    func t(_ key: String) -> String {
+        let lang = currentLanguage
+        return translations[lang]?[key] ?? translations[.en]?[key] ?? key
+    }
+    
+    private let translations: [Language: [String: String]] = [
+        .zh: [
+            // 窗口标题
+            "welcome.title": "欢迎使用 DevPulse",
+            "settings.title": "DevPulse 偏好设置",
+            "onboarding.title": "快速上手指南",
+            
+            // 设置项
+            "settings.launchAtLogin": "开机自动启动",
+            "settings.autoStartAPI": "启动时自动开启 API 服务",
+            "settings.zenMode": "全屏时自动隐藏 (专注模式)",
+            "settings.miniMode": "Mini 悬浮球模式 (小圆点)",
+            "settings.customPosition": "使用自定义位置",
+            "settings.devMode": "开发者模式",
+            "settings.language": "语言",
+            "settings.archiveDays": "Session 归档天数:",
+            "settings.barWidth": "指示条宽度",
+            "settings.barOpacity": "指示条透明度",
+            "settings.contextLimit": "上下文窗口限制:",
+            "settings.customColors": "自定义状态颜色:",
+            "settings.resetDefaults": "恢复默认设置",
+            
+            // 状态
+            "status.inactive": "未活跃",
+            "status.idle": "就绪",
+            "status.thinking": "思考",
+            "status.working": "工作中",
+            "status.compacting": "压缩中",
+            "status.error": "报错",
+            
+            // 菜单
+            "menu.monitoring": "正在监控",
+            "menu.statusSource": "状态来源",
+            "menu.recentSessions": "最近会话 (点击切换):",
+            "menu.noSessions": "暂无可用会话 (请先启动 opencode)",
+            "menu.archived": "已归档",
+            "menu.moreHistory": "更多历史会话...",
+            "menu.settings": "偏好设置...",
+            "menu.guide": "使用指南...",
+            "menu.toggleVisibility": "显示/隐藏指示条",
+            "menu.refreshSessions": "刷新会话列表",
+            "menu.startAPI": "启动 API 服务",
+            "menu.stopAPI": "停止 API 服务",
+            "menu.apiRunning": "API 服务已运行",
+            "menu.testConfetti": "测试彩带",
+            "menu.devMode": "开发者模式",
+            "menu.cycleStatus": "轮播状态演示",
+            "menu.quit": "退出 DevPulse",
+            
+            // HUD
+            "hud.session": "会话",
+            "hud.model": "模型",
+            "hud.modelSwitch": "模型切换",
+            "hud.recentTool": "最近工具",
+            "hud.contextUsage": "上下文占用",
+            "hud.cost": "费用",
+            "hud.duration": "耗时",
+            "hud.noTool": "无工具调用",
+            "hud.noSession": "未选择会话",
+            "hud.compacted": "上下文已压缩",
+            "hud.tokens": "tokens",
+            "hud.reduced": "减少",
+            "hud.minutes": "分",
+            "hud.seconds": "秒",
+            "hud.customProvider": "N/A (自定义 Provider)",
+            
+            // API 服务
+            "api.notStarted": "API 服务未启动",
+            "api.starting": "API 服务启动中...",
+            "api.started": "API 服务已启动",
+            "api.stopped": "API 服务已停止",
+            "api.failed": "API 服务启动失败",
+            "api.noServiceJson": "API 服务已启动，但未发现 service.json",
+            "api.service": "API 服务",
+            
+            // 开发模式
+            "dev.confirmTitle": "开启开发者模式？",
+            "dev.confirmMessage": "开发者模式包含调试工具和状态演示功能，仅供开发测试使用。确定要开启吗？",
+            "dev.running": "运行中",
+            "dev.notRunning": "未运行",
+            "dev.submitting": "提交中...",
+            "dev.submitted": "已提交",
+            "dev.copied": "已复制",
+            
+            // 归档选项
+            "archive.3days": "3 天",
+            "archive.7days": "7 天",
+            "archive.14days": "14 天",
+            "archive.30days": "30 天",
+            "archive.never": "永不",
+            
+            // 颜色标签
+            "color.idle": "就绪 (绿):",
+            "color.thinking": "思考 (青):",
+            "color.working": "工作 (紫):",
+            "color.error": "报错 (红):",
+        ],
+        .en: [
+            // Window titles
+            "welcome.title": "Welcome to DevPulse",
+            "settings.title": "DevPulse Preferences",
+            "onboarding.title": "Quick Start Guide",
+            
+            // Settings
+            "settings.launchAtLogin": "Launch at login",
+            "settings.autoStartAPI": "Auto-start API service on launch",
+            "settings.zenMode": "Auto-hide in fullscreen (Zen mode)",
+            "settings.miniMode": "Mini floating ball mode",
+            "settings.customPosition": "Use custom position",
+            "settings.devMode": "Developer mode",
+            "settings.language": "Language",
+            "settings.archiveDays": "Session archive days:",
+            "settings.barWidth": "Bar width",
+            "settings.barOpacity": "Bar opacity",
+            "settings.contextLimit": "Context window limit:",
+            "settings.customColors": "Custom status colors:",
+            "settings.resetDefaults": "Reset to defaults",
+            
+            // Status
+            "status.inactive": "Inactive",
+            "status.idle": "Idle",
+            "status.thinking": "Thinking",
+            "status.working": "Working",
+            "status.compacting": "Compacting",
+            "status.error": "Error",
+            
+            // Menu
+            "menu.monitoring": "Monitoring",
+            "menu.statusSource": "Status source",
+            "menu.recentSessions": "Recent sessions (click to switch):",
+            "menu.noSessions": "No sessions available (start opencode first)",
+            "menu.archived": "Archived",
+            "menu.moreHistory": "More history...",
+            "menu.settings": "Preferences...",
+            "menu.guide": "User guide...",
+            "menu.toggleVisibility": "Show/Hide bar",
+            "menu.refreshSessions": "Refresh sessions",
+            "menu.startAPI": "Start API service",
+            "menu.stopAPI": "Stop API service",
+            "menu.apiRunning": "API service running",
+            "menu.testConfetti": "Test confetti",
+            "menu.devMode": "Developer mode",
+            "menu.cycleStatus": "Cycle status demo",
+            "menu.quit": "Quit DevPulse",
+            
+            // HUD
+            "hud.session": "Session",
+            "hud.model": "Model",
+            "hud.modelSwitch": "Model switch",
+            "hud.recentTool": "Recent tool",
+            "hud.contextUsage": "Context usage",
+            "hud.cost": "Cost",
+            "hud.duration": "Duration",
+            "hud.noTool": "No tool calls",
+            "hud.noSession": "No session selected",
+            "hud.compacted": "Context compacted",
+            "hud.tokens": "tokens",
+            "hud.reduced": "reduced",
+            "hud.minutes": "min",
+            "hud.seconds": "sec",
+            "hud.customProvider": "N/A (Custom Provider)",
+            
+            // API service
+            "api.notStarted": "API service not started",
+            "api.starting": "API service starting...",
+            "api.started": "API service started",
+            "api.stopped": "API service stopped",
+            "api.failed": "API service failed to start",
+            "api.noServiceJson": "API service started, but no service.json found",
+            "api.service": "API service",
+            
+            // Dev mode
+            "dev.confirmTitle": "Enable Developer Mode?",
+            "dev.confirmMessage": "Developer mode includes debug tools and status demos for testing only. Are you sure?",
+            "dev.running": "Running",
+            "dev.notRunning": "Not running",
+            "dev.submitting": "Submitting...",
+            "dev.submitted": "Submitted",
+            "dev.copied": "Copied",
+            
+            // Archive options
+            "archive.3days": "3 days",
+            "archive.7days": "7 days",
+            "archive.14days": "14 days",
+            "archive.30days": "30 days",
+            "archive.never": "Never",
+            
+            // Color labels
+            "color.idle": "Idle (Green):",
+            "color.thinking": "Thinking (Cyan):",
+            "color.working": "Working (Purple):",
+            "color.error": "Error (Red):",
+        ]
+    ]
+}
+
+// Convenience function
+func t(_ key: String) -> String {
+    return L10n.shared.t(key)
+}
+
 // MARK: - Session Model & Metrics
 struct OpencodeSession {
     let id: String
@@ -114,6 +339,19 @@ class SettingsManager {
         set { UserDefaults.standard.set(newValue, forKey: "ArchiveDays") }
     }
     
+    var devMode: Bool {
+        get { UserDefaults.standard.bool(forKey: "DevMode") }
+        set { UserDefaults.standard.set(newValue, forKey: "DevMode") }
+    }
+    
+    var language: String {
+        get {
+            let val = UserDefaults.standard.string(forKey: "Language") ?? ""
+            return val.isEmpty ? "auto" : val
+        }
+        set { UserDefaults.standard.set(newValue, forKey: "Language") }
+    }
+    
     var useCustomPosition: Bool {
         get { UserDefaults.standard.bool(forKey: "UseCustomPosition") }
         set { UserDefaults.standard.set(newValue, forKey: "UseCustomPosition") }
@@ -162,7 +400,7 @@ class OnboardingWindowController: NSWindowController {
             backing: .buffered,
             defer: false
         )
-        window.title = "欢迎使用 OpenCodeMonitor"
+        window.title = "欢迎使用 DevPulse"
         window.center()
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = true
@@ -193,7 +431,7 @@ class OnboardingWindowController: NSWindowController {
         
         let tips = """
         1. 桌面宠物交互：直接点击底部的状态胶囊条，它会在右上角随机吐出一个手写风格的颜表情或萌趣符号！
-        2. 菜单栏图标：点击顶部菜单栏图标可随时切换监控的 OpenCode 会话。
+        2. 菜单栏图标：点击顶部菜单栏图标可随时切换监控的会话。
         3. 悬浮详情 (HUD)：将鼠标悬停在底部指示条上，即可实时查看 Token 消耗、模型与费用。
         4. 庆祝彩带：当 AI 成功完成一项任务时，底部会自动绽放微型庆祝粒子！
         5. 偏好设置：通过菜单栏或右键打开设置，可自定义宽度、透明度、开机启动及状态颜色。
@@ -229,7 +467,7 @@ class SettingsWindowController: NSWindowController {
             backing: .buffered,
             defer: false
         )
-        window.title = "OpenCodeMonitor 偏好设置"
+        window.title = "DevPulse 偏好设置"
         window.minSize = NSSize(width: 460, height: 500)
         window.center()
         window.titlebarAppearsTransparent = true
@@ -345,6 +583,35 @@ class SettingsWindowController: NSWindowController {
         archivePopup.target = self
         archivePopup.action = #selector(archiveDaysChanged(_:))
         container.addSubview(archivePopup)
+        
+        y -= 45
+        
+        let langLabel = NSTextField(labelWithString: "语言:")
+        langLabel.font = NSFont.systemFont(ofSize: 12)
+        langLabel.frame = NSRect(x: 40, y: y + 4, width: 80, height: 20)
+        container.addSubview(langLabel)
+        
+        let langPopup = NSPopUpButton(frame: NSRect(x: 130, y: y, width: 120, height: 26))
+        let currentLang = SettingsManager.shared.language
+        let langOptions: [(String, String)] = [("自动", "auto"), ("中文", "zh"), ("English", "en")]
+        for (label, value) in langOptions {
+            langPopup.addItem(withTitle: label)
+            langPopup.lastItem?.representedObject = value
+            if value == currentLang {
+                langPopup.selectItem(at: langPopup.numberOfItems - 1)
+            }
+        }
+        langPopup.target = self
+        langPopup.action = #selector(languageChanged(_:))
+        container.addSubview(langPopup)
+        
+        y -= 35
+        
+        let devModeCheckbox = NSButton(checkboxWithTitle: "开发者模式", target: nil, action: #selector(devModeToggled(_:)))
+        devModeCheckbox.frame = NSRect(x: 40, y: y, width: 300, height: 24)
+        devModeCheckbox.state = SettingsManager.shared.devMode ? .on : .off
+        devModeCheckbox.target = self
+        container.addSubview(devModeCheckbox)
         
         y -= 45
         
@@ -490,6 +757,33 @@ class SettingsWindowController: NSWindowController {
             SettingsManager.shared.archiveDays = value
             NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
         }
+    }
+    
+    @objc private func languageChanged(_ sender: NSPopUpButton) {
+        if let value = sender.selectedItem?.representedObject as? String {
+            SettingsManager.shared.language = value
+            NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("LanguageChanged"), object: nil)
+        }
+    }
+    
+    @objc private func devModeToggled(_ sender: NSButton) {
+        let newState = sender.state == .on
+        if newState && !SettingsManager.shared.devMode {
+            let alert = NSAlert()
+            alert.messageText = "开启开发者模式？"
+            alert.informativeText = "开发者模式包含调试工具和状态演示功能，仅供开发测试使用。确定要开启吗？"
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "开启")
+            alert.addButton(withTitle: "取消")
+            let response = alert.runModal()
+            if response == .alertSecondButtonReturn {
+                sender.state = .off
+                return
+            }
+        }
+        SettingsManager.shared.devMode = newState
+        NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
     }
     
     @objc private func widthChanged(_ sender: NSSlider) {
@@ -2357,7 +2651,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let activeSessions = sessions.filter { $0.timeUpdated > archiveThreshold || archiveDays >= 999 }
         let archivedSessions = sessions.filter { $0.timeUpdated <= archiveThreshold && archiveDays < 999 }
         
-        let processStatus = isOpencodeRunning ? "OpenCode 运行中" : "OpenCode 未运行"
+        let processStatus = isOpencodeRunning ? "opencode 运行中" : "opencode 未运行"
         let processItem = NSMenuItem(title: processStatus, action: nil, keyEquivalent: "")
         processItem.isEnabled = false
         sessionsMenu.addItem(processItem)
@@ -2380,7 +2674,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         sessionsMenu.addItem(headerItem)
         
         if activeSessions.isEmpty && archivedSessions.isEmpty {
-            let emptyItem = NSMenuItem(title: "暂无可用会话 (请先启动 OpenCode)", action: nil, keyEquivalent: "")
+            let emptyItem = NSMenuItem(title: "暂无可用会话 (请先启动 opencode)", action: nil, keyEquivalent: "")
             emptyItem.isEnabled = false
             sessionsMenu.addItem(emptyItem)
         } else {
@@ -2464,13 +2758,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         apiServiceStatusItem.isEnabled = false
         sessionsMenu.addItem(apiServiceStatusItem)
 
-        let confettiItem = NSMenuItem(title: "测试彩带", action: #selector(testConfetti(_:)), keyEquivalent: "")
-        confettiItem.target = self
-        sessionsMenu.addItem(confettiItem)
+        if SettingsManager.shared.devMode {
+            sessionsMenu.addItem(NSMenuItem.separator())
+            
+            let devModeMenu = NSMenu()
+            let devModeItem = NSMenuItem(title: "开发者模式", action: nil, keyEquivalent: "")
+            devModeItem.submenu = devModeMenu
+            
+            let confettiItem = NSMenuItem(title: "测试彩带", action: #selector(testConfetti(_:)), keyEquivalent: "")
+            confettiItem.target = self
+            devModeMenu.addItem(confettiItem)
+            
+            let cycleItem = NSMenuItem(title: "轮播状态演示", action: #selector(toggleStatusCycle(_:)), keyEquivalent: "")
+            cycleItem.target = self
+            devModeMenu.addItem(cycleItem)
+            
+            let debugItem = NSMenuItem(title: "调试信息", action: #selector(showDebugInfo(_:)), keyEquivalent: "")
+            debugItem.target = self
+            devModeMenu.addItem(debugItem)
+            
+            sessionsMenu.addItem(devModeItem)
+        }
         
         sessionsMenu.addItem(NSMenuItem.separator())
         
-        let quitItem = NSMenuItem(title: "退出 OpenCode 状态监控", action: #selector(quitClicked(_:)), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: "退出 DevPulse", action: #selector(quitClicked(_:)), keyEquivalent: "q")
         quitItem.target = self
         sessionsMenu.addItem(quitItem)
     }
@@ -2520,7 +2832,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         showConfettiBurst()
     }
     
+    private var statusCycleTimer: Timer?
+    private var statusCycleIndex = 0
+    private let statusCycleStates: [SessionState] = [.idle, .thinking, .working, .compacting, .error, .idle]
+    
+    @objc func toggleStatusCycle(_ sender: NSMenuItem) {
+        if statusCycleTimer != nil {
+            statusCycleTimer?.invalidate()
+            statusCycleTimer = nil
+            sender.title = "轮播状态演示"
+        } else {
+            statusCycleIndex = 0
+            statusCycleTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                let state = self.statusCycleStates[self.statusCycleIndex % self.statusCycleStates.count]
+                self.indicatorView.currentState = state
+                self.statusCycleIndex += 1
+            }
+            sender.title = "停止轮播"
+        }
+    }
+    
+    @objc func showDebugInfo(_ sender: NSMenuItem) {
+        let alert = NSAlert()
+        alert.messageText = "调试信息"
+        let info = """
+        当前状态: \(indicatorView.currentState)
+        状态来源: \(lastStateDebug)
+        选中会话: \(selectedSessionID ?? "无")
+        开发者模式: \(SettingsManager.shared.devMode ? "开启" : "关闭")
+        语言: \(SettingsManager.shared.language)
+        指示条宽度: \(Int(SettingsManager.shared.barWidth))
+        透明度: \(Int(SettingsManager.shared.barOpacity * 100))%
+        """
+        alert.informativeText = info
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "确定")
+        alert.runModal()
+    }
+    
     @objc func quitClicked(_ sender: NSMenuItem) {
+        statusCycleTimer?.invalidate()
         NSApplication.shared.terminate(nil)
     }
     
