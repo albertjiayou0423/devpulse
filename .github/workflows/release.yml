@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/heads/main ]]; then
+            VERSION="v$(date +'%Y.%m.%d')-${GITHUB_SHA::7}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          else
+            BRANCH_NAME=${GITHUB_REF#refs/heads/}
+            VERSION="pre-${BRANCH_NAME//\//-}-$(date +'%Y%m%d%H%M')"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Build app
+        run: |
+          swiftc -O Sources/OpenCodeMonitor/main.swift -o OpenCodeMonitor \
+            -Xlinker -lsqlite3 -framework Cocoa -framework ServiceManagement
+          cp OpenCodeMonitor OpenCodeMonitor.app/Contents/MacOS/OpenCodeMonitor
+      
+      - name: Install create-dmg
+        run: brew install create-dmg
+        
+      - name: Create DMG
+        run: |
+          create-dmg \
+            --volname "DevPulse" \
+            --background "assets/dmg-background.png" \
+            --window-pos 200 120 \
+            --window-size 660 400 \
+            --icon-size 128 \
+            --icon "OpenCodeMonitor.app" 165 200 \
+            --hide-extension "OpenCodeMonitor.app" \
+            --app-drop-link 495 200 \
+            "DevPulse.dmg" \
+            "OpenCodeMonitor.app"
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: DevPulse.dmg
+          name: DevPulse ${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          body: |
+            ## DevPulse ${{ steps.version.outputs.version }}
+            
+            ${{ steps.version.outputs.prerelease == 'true' && '🚧 Pre-release build' || '✅ Stable release' }}
+            
+            ### Installation
+            
+            1. Download `DevPulse.dmg`
+            2. Open and drag to Applications
+            3. Launch from Applications
+            
+            ### Requirements
+            
+            - macOS 14.0+
+            - [opencode](https://github.com/opencode-ai/opencode) installed
+            
+            ---
+            Built from commit ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
