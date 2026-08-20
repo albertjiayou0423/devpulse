@@ -7,10 +7,11 @@ A macOS menu bar app that monitors your [opencode](https://github.com/opencode-a
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-orange)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Version](https://img.shields.io/badge/version-0.1.0-green)
-[![Download](https://img.shields.io/badge/download-v0.1.0-brightgreen)](https://github.com/albertjiayou0423/devpulse/releases/download/v0.1.0/DevPulse-v0.1.0.zip)
 [![Patreon](https://img.shields.io/badge/support-patreon-orange?logo=patreon&logoColor=white)](https://www.patreon.com/cw/huo_sai)
 
-## ✨ Features
+**English** | [中文](./README_zh.md)
+
+## Features
 
 - **Real-time monitoring** — Watch your opencode sessions as they run
 - **Status indicators** — Visual feedback for working, thinking, idle, compacting, and error states
@@ -19,12 +20,12 @@ A macOS menu bar app that monitors your [opencode](https://github.com/opencode-a
 - **Question handling** — Respond to opencode questions directly from the menu bar
 - **Glass-morphism HUD** — Beautiful status list interface
 
-## 📦 Installation
+## Installation
 
 ### Quick Start
 
-1. Download [DevPulse-v0.1.0.zip](https://github.com/albertjiayou0423/devpulse/releases/download/v0.1.0/DevPulse-v0.1.0.zip)
-2. Unzip and move `OpenCodeMonitor.app` to your Applications folder
+1. Download `DevPulse.dmg` from the [Releases](https://github.com/albertjiayou0423/devpulse/releases) page
+2. Open the DMG and drag DevPulse to your Applications folder
 3. Launch the app — you'll see the status bar in your menu bar
 
 ### From Source
@@ -50,7 +51,7 @@ open OpenCodeMonitor.app
 - macOS 14.0+
 - [opencode](https://github.com/opencode-ai/opencode) installed and running
 
-## 🎯 How It Works
+## How It Works
 
 DevPulse reads from opencode's SQLite database at `~/.local/share/opencode/opencode.db` to track:
 
@@ -59,7 +60,7 @@ DevPulse reads from opencode's SQLite database at `~/.local/share/opencode/openc
 - Subagent relationships and status
 - Tool calls and their outcomes
 
-## 🎨 Status Colors
+## Status Colors
 
 | Color | State | Meaning |
 |-------|-------|---------|
@@ -69,14 +70,12 @@ DevPulse reads from opencode's SQLite database at `~/.local/share/opencode/openc
 | 🟠 Orange | Compacting | Context compression in progress |
 | 🔴 Red | Error | Something went wrong |
 
-## 📸 Screenshots
+## Development
 
-*Coming soon — run the app and take your own screenshot!*
-
-## 🛠️ Development
+### Build
 
 ```bash
-# Build
+# Compile
 swiftc -O Sources/OpenCodeMonitor/main.swift -o OpenCodeMonitor \
   -Xlinker -lsqlite3 -framework Cocoa -framework ServiceManagement
 
@@ -86,7 +85,27 @@ pkill -9 OpenCodeMonitor 2>/dev/null; sleep 0.5
 open OpenCodeMonitor.app
 ```
 
-## 🗺️ Roadmap
+### Create DMG Installer
+
+```bash
+hdiutil create -volname "DevPulse" -srcfolder OpenCodeMonitor.app -ov -format UDZO DevPulse.dmg
+```
+
+### Project Structure
+
+```
+devpulse/
+├── Sources/
+│   └── OpenCodeMonitor/
+│       └── main.swift          # Main app source (~3300 lines)
+├── OpenCodeMonitor.app/        # App bundle
+├── branding.html               # Brand identity document
+├── suggestions.html            # 100 improvement suggestions
+├── README.md                   # English documentation
+└── README_zh.md                # Chinese documentation
+```
+
+## Roadmap
 
 - [ ] iOS companion app
 - [ ] Session history timeline
@@ -96,11 +115,11 @@ open OpenCodeMonitor.app
 - [ ] Keyboard shortcuts
 - [ ] Export session data
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## ☕ Support
+## Support
 
 If you find DevPulse useful, consider supporting the project:
 
@@ -110,11 +129,11 @@ If you find DevPulse useful, consider supporting the project:
 
 Your support helps keep this project alive and enables new features.
 
-## 📄 License
+## License
 
 MIT © 2026
 
-## 🎨 Brand
+## Brand
 
 See [branding.html](./branding.html) for the complete brand identity.
 

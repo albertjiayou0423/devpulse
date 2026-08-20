@@ -2,6 +2,8 @@
 .build/
 /OpenCodeMonitor
 /OpenCodeMonitor.app/
+*.dmg
+*.zip
 
 # Xcode
 *.xcodeproj/
@@ -22,3 +24,6 @@ DerivedData/
 
 # Debug
 *.log
+
+# Assets (screenshots, videos)
+assets/
