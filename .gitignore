@@ -1,0 +1,24 @@
+# Build artifacts
+.build/
+/OpenCodeMonitor
+/OpenCodeMonitor.app/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# Debug
+*.log

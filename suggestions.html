@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenCodeMonitor - 100 条改进建议</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: #0a0a0f;
+    color: #e8e8ed;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 60px 0 50px;
+    background: linear-gradient(135deg, rgba(120,80,255,0.15) 0%, rgba(0,200,180,0.1) 100%);
+    border-radius: 24px;
+    margin-bottom: 48px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a78bfa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  header p { color: #888; font-size: 1rem; }
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+    padding: 12px 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    min-width: 100px;
+  }
+  .stat-num { font-size: 1.6rem; font-weight: 700; color: #a78bfa; }
+  .stat-label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+  .category {
+    margin-bottom: 40px;
+  }
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .category-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .category-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f0f0f5;
+  }
+  .category-count {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #555;
+    background: rgba(255,255,255,0.05);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .suggestion {
+    display: flex;
+    gap: 14px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.025);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.2s ease;
+  }
+  .suggestion:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+    transform: translateX(4px);
+  }
+  .suggestion-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #555;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .suggestion-content { flex: 1; }
+  .suggestion-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #ddd;
+    margin-bottom: 4px;
+  }
+  .suggestion-desc {
+    font-size: 0.82rem;
+    color: #777;
+    line-height: 1.5;
+  }
+  .priority {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .priority-high { background: rgba(239,68,68,0.15); color: #f87171; }
+  .priority-medium { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .priority-low { background: rgba(52,211,153,0.15); color: #34d399; }
+
+  .cat-ui .category-icon { background: rgba(167,139,250,0.15); }
+  .cat-perf .category-icon { background: rgba(251,191,36,0.15); }
+  .cat-feature .category-icon { background: rgba(52,211,153,0.15); }
+  .cat-bug .category-icon { background: rgba(239,68,68,0.15); }
+  .cat-visual .category-icon { background: rgba(96,165,250,0.15); }
+  .cat-config .category-icon { background: rgba(244,114,182,0.15); }
+  .cat-integration .category-icon { background: rgba(163,230,53,0.15); }
+  .cat-arch .category-icon { background: rgba(148,163,184,0.15); }
+  .cat-a11y .category-icon { background: rgba(251,146,60,0.15); }
+  .cat-dx .category-icon { background: rgba(129,140,248,0.15); }
+
+  footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    color: #444;
+    font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>OpenCodeMonitor 100 条改进建议</h1>
+  <p>基于当前开发状态的全面改进路线图</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">100</div><div class="stat-label">建议总数</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">分类</div></div>
+    <div class="stat"><div class="stat-num">30</div><div class="stat-label">高优先级</div></div>
+  </div>
+</header>
+
+<!-- 1. UI/UX -->
+<div class="category cat-ui">
+  <div class="category-header">
+    <div class="category-icon">🎯</div>
+    <div class="category-title">UI / 交互体验</div>
+    <div class="category-count">12 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">01</div><div class="suggestion-content"><div class="suggestion-title">Subagent HUD 增加状态摘要行</div><div class="suggestion-desc">在列表顶部加一行汇总：当前活跃数 / 已完成数 / 错误数，一眼掌握全局。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">02</div><div class="suggestion-content"><div class="suggestion-title">Subagent 小点支持点击展开</div><div class="suggestion-desc">除了 hover，增加点击锁定 HUD 的能力，方便用户仔细查看详情而不需要持续悬停。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">03</div><div class="suggestion-content"><div class="suggestion-title">状态条增加右键菜单快捷操作</div><div class="suggestion-desc">右键状态条可直接复制 session ID、打开终端、查看日志，减少菜单层级。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">04</div><div class="suggestion-content"><div class="suggestion-title">Mini 模式增加状态文字缩写</div><div class="suggestion-desc">悬浮球模式下显示 "WRK" / "THK" / "IDL" 等状态缩写，比纯颜色更直观。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">05</div><div class="suggestion-content"><div class="suggestion-title">Session 列表支持搜索过滤</div><div class="suggestion-desc">菜单栏 session 列表增加搜索框，快速按标题/目录/模型过滤。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">06</div><div class="suggestion-content"><div class="suggestion-title">Subagent HUD 显示运行时长</div><div class="suggestion-desc">每个 subagent 行尾显示已运行时间，方便追踪长时间阻塞的子任务。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">07</div><div class="suggestion-content"><div class="suggestion-title">状态条拖拽调整位置</div><div class="suggestion-desc">允许用户拖拽状态条到屏幕任意位置，并记住位置偏好。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">08</div><div class="suggestion-content"><div class="suggestion-title">Hover HUD 增加关闭按钮</div><div class="suggestion-desc">Session 详情 HUD 右上角加一个小关闭按钮，支持手动关闭。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">09</div><div class="suggestion-content"><div class="suggestion-title">多 Monitor 支持</div><div class="suggestion-desc">状态条和 HUD 应能正确显示在多显示器环境中，跟随鼠标所在屏幕。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">10</div><div class="suggestion-content"><div class="suggestion-title">Question 弹窗支持键盘导航</div><div class="suggestion-desc">当出现 question 选择时，支持方向键选择、回车确认、Esc 取消。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">11</div><div class="suggestion-content"><div class="suggestion-title">Subagent 列表按状态排序</div><div class="suggestion-desc">错误 > 工作中 > 思考 > 就绪，让用户第一眼看到最需要关注的。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">12</div><div class="suggestion-content"><div class="suggestion-title">状态条双击打开完整 Dashboard</div><div class="suggestion-desc">双击状态条弹出一个完整窗口，显示所有 session 的详细信息和统计图表。</div><span class="priority priority-low">低</span></div></div>
+</div>
+
+<!-- 2. 性能 -->
+<div class="category cat-perf">
+  <div class="category-header">
+    <div class="category-icon">⚡</div>
+    <div class="category-title">性能优化</div>
+    <div class="category-count">10 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">13</div><div class="suggestion-content"><div class="suggestion-title">SQLite 查询结果缓存</div><div class="suggestion-desc">对 fetchSessionDetails 等高频查询加内存缓存，避免每次 poll 都重新读 DB。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">14</div><div class="suggestion-content"><div class="suggestion-title">增量轮询替代全量查询</div><div class="suggestion-desc">只查询 time_updated 有变化的 session，减少不必要的 DB 读取。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">15</div><div class="suggestion-content"><div class="suggestion-title">后台线程执行 DB 查询</div><div class="suggestion-desc">将 pollSessionState 的 SQLite 操作移到后台队列，避免阻塞主线程 UI。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">16</div><div class="suggestion-content"><div class="suggestion-title">减少 NSView 创建数量</div><div class="suggestion-desc">HUD 更新时复用已有 view，而不是 removeAll + 重建，减少内存分配。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">17</div><div class="suggestion-content"><div class="suggestion-title">动画帧率自适应</div><div class="suggestion-desc">非活跃状态时降低动画帧率，节省 GPU 资源。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">18</div><div class="suggestion-content"><div class="suggestion-title">DB 连接池化</div><div class="suggestion-desc">复用单个 SQLite 连接而非每次 open/close，减少文件系统开销。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">19</div><div class="suggestion-content"><div class="suggestion-title">JSON 解析优化</div><div class="suggestion-desc">对 part.data 的 JSON 解析使用更轻量的方式（如手动解析关键字段），避免完整反序列化。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">20</div><div class="suggestion-content"><div class="suggestion-title">HUD 窗口预创建</div><div class="suggestion-desc">启动时预创建 HUD 窗口实例，hover 时只显示/更新，避免首次 hover 延迟。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">21</div><div class="suggestion-content"><div class="suggestion-title">定时器合并</div><div class="suggestion-desc">将多个 Timer 合并为一个，减少唤醒次数。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">22</div><div class="suggestion-content"><div class="suggestion-title">CALayer shadowPath 优化</div><div class="suggestion-desc">为所有带阴影的 layer 设置 shadowPath，避免每帧重新计算阴影边界。</div><span class="priority priority-medium">中</span></div></div>
+</div>
+
+<!-- 3. 新功能 -->
+<div class="category cat-feature">
+  <div class="category-header">
+    <div class="category-icon">✨</div>
+    <div class="category-title">新功能</div>
+    <div class="category-count">14 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">23</div><div class="suggestion-content"><div class="suggestion-title">Session 历史时间线视图</div><div class="suggestion-desc">展示过去 24 小时的状态变化时间线，可视化工作节奏。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">24</div><div class="suggestion-content"><div class="suggestion-title">Token 用量统计图表</div><div class="suggestion-desc">在设置窗口或独立面板中显示每日/每周 token 消耗趋势图。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">25</div><div class="suggestion-content"><div class="suggestion-title">Session 标签/分组</div><div class="suggestion-desc">允许用户给 session 打标签（如 "调试"、"重构"），方便分类管理。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">26</div><div class="suggestion-content"><div class="suggestion-title">错误日志快速查看</div><div class="suggestion-desc">点击错误状态时直接展示最近的错误消息摘要，无需切换终端。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">27</div><div class="suggestion-content"><div class="suggestion-title">Compaction 历史记录</div><div class="suggestion-desc">记录每次 compaction 的 token 节省量，显示累计节省统计。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">28</div><div class="suggestion-content"><div class="suggestion-title">Session 导出功能</div><div class="suggestion-desc">支持将 session 对话导出为 Markdown / JSON / PDF 文件。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">29</div><div class="suggestion-content"><div class="suggestion-title">多 Project 同时监控</div><div class="suggestion-desc">支持同时监控多个 opencode 项目的 session，用 tab 或下拉切换。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">30</div><div class="suggestion-content"><div class="suggestion-title">Subagent 关系树视图</div><div class="suggestion-desc">用树形图展示 parent-child session 关系，直观看到任务分解结构。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">31</div><div class="suggestion-content"><div class="suggestion-title">实时日志流</div><div class="suggestion-desc">在 HUD 中显示当前 session 的实时 tool 调用日志流。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">32</div><div class="suggestion-content"><div class="suggestion-title">Session 对比功能</div><div class="suggestion-desc">选择两个 session 并排对比 token 用量、时长、工具调用频次。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">33</div><div class="suggestion-content"><div class="suggestion-title">自动归档旧 Session</div><div class="suggestion-desc">超过 N 天的 session 自动从列表中隐藏，减少视觉噪音。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">34</div><div class="suggestion-content"><div class="suggestion-title">快捷键支持</div><div class="suggestion-desc">全局快捷键切换状态条显示/隐藏、切换 session、打开设置。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">35</div><div class="suggestion-content"><div class="suggestion-title">通知中心集成</div><div class="suggestion-desc">将错误和完成事件推送到 macOS 通知中心。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">36</div><div class="suggestion-content"><div class="suggestion-title">Focus 模式自动切换</div><div class="suggestion-desc">检测到 opencode 运行时自动进入专注模式，退出时恢复。</div><span class="priority priority-low">低</span></div></div>
+</div>
+
+<!-- 4. Bug 修复 -->
+<div class="category cat-bug">
+  <div class="category-header">
+    <div class="category-icon">🐛</div>
+    <div class="category-title">Bug 修复 / 稳定性</div>
+    <div class="category-count">10 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">37</div><div class="suggestion-content"><div class="suggestion-title">Confetti 触发条件精确化</div><div class="suggestion-desc">确保只在非 idle -> idle 转换时触发，避免重复庆祝同一 stop 事件。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">38</div><div class="suggestion-content"><div class="suggestion-title">HUD 位置跟随状态条移动</div><div class="suggestion-desc">当状态条位置变化时，HUD 应平滑跟随而不是跳变。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">39</div><div class="suggestion-content"><div class="suggestion-title">SQLite 并发安全</div><div class="suggestion-desc">确保多线程访问 DB 时使用正确的锁机制，避免 SQLITE_BUSY。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">40</div><div class="suggestion-content"><div class="suggestion-title">内存泄漏排查</div><div class="suggestion-desc">检查 NSWindow/NSView 创建后是否正确释放，特别是 HUD 窗口。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">41</div><div class="suggestion-content"><div class="suggestion-title">Opencode 进程退出检测</div><div class="suggestion-desc">当 opencode 进程退出时，状态条应平滑切换到 inactive 而不是卡住。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">42</div><div class="suggestion-content"><div class="suggestion-title">DB 文件不存在时的优雅降级</div><div class="suggestion-desc">首次启动 opencode 还没创建 DB 时，不应报错或崩溃。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">43</div><div class="suggestion-content"><div class="suggestion-title">ChildDot hover 区域精确化</div><div class="suggestion-desc">确保 hover 热区不会和其他 UI 元素重叠导致误触发。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">44</div><div class="suggestion-content"><div class="suggestion-title">Question 超时处理</div><div class="suggestion-desc">如果 question 长时间未回答，应显示超时状态而非一直等待。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">45</div><div class="suggestion-content"><div class="suggestion-title">状态条闪烁问题</div><div class="suggestion-desc">状态快速切换时不应出现视觉闪烁，应使用插值过渡。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">46</div><div class="suggestion-content"><div class="suggestion-title">API 服务进程管理</div><div class="suggestion-desc">确保 app 退出时正确终止启动的 opencode serve 子进程。</div><span class="priority priority-high">高</span></div></div>
+</div>
+
+<!-- 5. 视觉 -->
+<div class="category cat-visual">
+  <div class="category-header">
+    <div class="category-icon">🎨</div>
+    <div class="category-title">视觉 / 动效</div>
+    <div class="category-count">12 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">47</div><div class="suggestion-content"><div class="suggestion-title">状态切换微动效</div><div class="suggestion-desc">状态变化时加入细微的缩放/呼吸效果，增强反馈感。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">48</div><div class="suggestion-content"><div class="suggestion-title">深色/浅色模式自适应</div><div class="suggestion-desc">HUD 背景和内容颜色应跟随系统外观自动切换。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">49</div><div class="suggestion-content"><div class="suggestion-title">Subagent 状态色一致性</div><div class="suggestion-desc">确保小点、HUD 行、状态条使用完全相同的颜色映射。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">50</div><div class="suggestion-content"><div class="suggestion-title">Compaction 专属动画</div><div class="suggestion-desc">压缩状态时使用独特的收缩/展开动画，区别于普通工作状态。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">51</div><div class="suggestion-content"><div class="suggestion-title">HUD 入场动画优化</div><div class="suggestion-desc">HUD 出现时从状态条方向滑入，消失时滑回，建立空间关联。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">52</div><div class="suggestion-content"><div class="suggestion-title">Session 球增加状态脉动</div><div class="suggestion-desc">活跃 session 的球体增加微弱的脉动光效，暗示正在进行中。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">53</div><div class="suggestion-content"><div class="suggestion-title">错误状态红色脉动</div><div class="suggestion-desc">错误状态下状态条边缘有缓慢的红色呼吸效果，引起注意但不刺眼。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">54</div><div class="suggestion-content"><div class="suggestion-title">菜单栏图标动态化</div><div class="suggestion-desc">菜单栏图标根据状态变化颜色或形状，而不只是静态圆点。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">55</div><div class="suggestion-content"><div class="suggestion-title">Token 进度条渐变</div><div class="suggestion-desc">上下文占用进度条根据比例从绿到黄到红渐变。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">56</div><div class="suggestion-content"><div class="suggestion-title">Subagent 完成时微庆祝</div><div class="suggestion-desc">当 subagent 从 working 变为 idle 时，小点短暂闪烁一下表示完成。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">57</div><div class="suggestion-content"><div class="suggestion-title">毛玻璃模糊度可调</div><div class="suggestion-desc">在设置中允许用户调整 HUD 毛玻璃的模糊强度。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">58</div><div class="suggestion-content"><div class="suggestion-title">状态条宽度自适应内容</div><div class="suggestion-desc">状态条宽度根据当前 session 标题长度动态调整，避免截断。</div><span class="priority priority-medium">中</span></div></div>
+</div>
+
+<!-- 6. 配置 -->
+<div class="category cat-config">
+  <div class="category-header">
+    <div class="category-icon">⚙️</div>
+    <div class="category-title">配置 / 自定义</div>
+    <div class="category-count">10 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">59</div><div class="suggestion-content"><div class="suggestion-title">轮询频率可调</div><div class="suggestion-desc">在设置中允许用户调整 DB 轮询间隔（如 1s / 2s / 5s）。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">60</div><div class="suggestion-content"><div class="suggestion-title">状态颜色自定义</div><div class="suggestion-desc">允许用户自定义每种状态对应的颜色。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">61</div><div class="suggestion-content"><div class="suggestion-title">HUD 显示内容可选</div><div class="suggestion-desc">让用户选择 HUD 中显示哪些信息（标题/模型/工具/状态）。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">62</div><div class="suggestion-content"><div class="suggestion-title">Confetti 开关</div><div class="suggestion-desc">在设置中允许关闭完成庆祝动画。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">63</div><div class="suggestion-content"><div class="suggestion-title">Subagent 显示数量限制</div><div class="suggestion-desc">允许用户设置最多显示几个 subagent 小点（1-5）。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">64</div><div class="suggestion-content"><div class="suggestion-title">导入/导出配置</div><div class="suggestion-desc">支持将设置导出为 JSON 文件，方便在多台机器间同步。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">65</div><div class="suggestion-content"><div class="suggestion-title">日志级别设置</div><div class="suggestion-desc">允许用户调整应用日志级别（debug/info/warn/error），方便排查问题。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">66</div><div class="suggestion-content"><div class="suggestion-title">DB 路径自定义</div><div class="suggestion-desc">允许用户指定 opencode.db 的路径，支持非默认安装位置。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">67</div><div class="suggestion-content"><div class="suggestion-title">状态条透明度可调</div><div class="suggestion-desc">在设置中增加状态条整体透明度滑块。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">68</div><div class="suggestion-content"><div class="suggestion-title">重置所有设置</div><div class="suggestion-desc">设置窗口底部增加"恢复默认"按钮，一键重置所有配置。</div><span class="priority priority-medium">中</span></div></div>
+</div>
+
+<!-- 7. 集成 -->
+<div class="category cat-integration">
+  <div class="category-header">
+    <div class="category-icon">🔗</div>
+    <div class="category-title">外部集成</div>
+    <div class="category-count">8 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">69</div><div class="suggestion-content"><div class="suggestion-title">Question 真正提交到 TUI</div><div class="suggestion-desc">通过 API 或 PTY 自动化将用户选择直接发送到 opencode TUI 进程。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">70</div><div class="suggestion-content"><div class="suggestion-title">Webhook 通知</div><div class="suggestion-desc">当 session 完成或出错时，发送 webhook 到 Slack/Discord/飞书。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">71</div><div class="suggestion-content"><div class="suggestion-title">AppleScript 支持</div><div class="suggestion-desc">暴露 AppleScript 接口，允许其他应用查询当前 opencode 状态。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">72</div><div class="suggestion-content"><div class="suggestion-title">CLI 子命令</div><div class="suggestion-desc">提供 opencode-monitor status / sessions / stats 等 CLI 命令。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">73</div><div class="suggestion-content"><div class="suggestion-title">HTTP API 暴露</div><div class="suggestion-desc">本地 HTTP 服务暴露 session 状态 JSON，方便其他工具集成。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">74</div><div class="suggestion-content"><div class="suggestion-title">Raycast / Alfred 集成</div><div class="suggestion-desc">提供 Raycast extension 或 Alfred workflow 快速查看状态。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">75</div><div class="suggestion-content"><div class="suggestion-title">Obsidian 笔记同步</div><div class="suggestion-desc">将 session 摘要自动写入 Obsidian vault 中的日志文件。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">76</div><div class="suggestion-content"><div class="suggestion-title">StatsD / Prometheus 指标</div><div class="suggestion-desc">将 token 用量、session 时长等指标导出为 metrics，接入监控系统。</div><span class="priority priority-low">低</span></div></div>
+</div>
+
+<!-- 8. 架构 -->
+<div class="category cat-arch">
+  <div class="category-header">
+    <div class="category-icon">🏗️</div>
+    <div class="category-title">架构 / 代码质量</div>
+    <div class="category-count">10 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">77</div><div class="suggestion-content"><div class="suggestion-title">拆分多文件模块</div><div class="suggestion-desc">将 3000+ 行的 main.swift 拆分为 DB、UI、Network、State 等独立模块。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">78</div><div class="suggestion-content"><div class="suggestion-title">引入 MVVM 架构</div><div class="suggestion-desc">将数据获取和 UI 渲染分离，使用 ViewModel 层管理状态。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">79</div><div class="suggestion-content"><div class="suggestion-title">单元测试覆盖</div><div class="suggestion-desc">为状态推断逻辑、JSON 解析、DB 查询添加单元测试。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">80</div><div class="suggestion-content"><div class="suggestion-title">使用 Swift Package Manager</div><div class="suggestion-desc">修复当前 SPM 构建问题，替代直接 swiftc 编译。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">81</div><div class="suggestion-content"><div class="suggestion-title">错误处理统一化</div><div class="suggestion-desc">定义自定义 Error 类型，替代散落的 guard/return 模式。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">82</div><div class="suggestion-content"><div class="suggestion-title">日志框架</div><div class="suggestion-desc">引入 os.log 或第三方日志框架，替代 print 调试。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">83</div><div class="suggestion-content"><div class="suggestion-title">CI/CD 自动化</div><div class="suggestion-desc">配置 GitHub Actions 自动编译、测试、打包 .app。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">84</div><div class="suggestion-content"><div class="suggestion-title">代码签名</div><div class="suggestion-desc">为 .app 添加 Developer ID 签名，避免 Gatekeeper 警告。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">85</div><div class="suggestion-content"><div class="suggestion-title">自动更新机制</div><div class="suggestion-desc">集成 Sparkle 或自定义更新检查，让用户自动获取新版本。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">86</div><div class="suggestion-content"><div class="suggestion-title">协议抽象</div><div class="suggestion-desc">将 DB 访问抽象为协议，方便测试时注入 mock。</div><span class="priority priority-medium">中</span></div></div>
+</div>
+
+<!-- 9. 无障碍 -->
+<div class="category cat-a11y">
+  <div class="category-header">
+    <div class="category-icon">♿</div>
+    <div class="category-title">无障碍 / 国际化</div>
+    <div class="category-count">8 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">87</div><div class="suggestion-content"><div class="suggestion-title">VoiceOver 支持</div><div class="suggestion-desc">为所有 UI 元素添加 accessibility label 和 role。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">88</div><div class="suggestion-content"><div class="suggestion-title">键盘完全可操作</div><div class="suggestion-desc">所有功能都能通过键盘访问，不依赖鼠标 hover。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">89</div><div class="suggestion-content"><div class="suggestion-title">高对比度模式</div><div class="suggestion-desc">支持 macOS 高对比度设置，确保文字和图标清晰可读。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">90</div><div class="suggestion-content"><div class="suggestion-title">英文界面支持</div><div class="suggestion-desc">所有中文文案提供英文 localization。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">91</div><div class="suggestion-content"><div class="suggestion-title">减少动画模式</div><div class="suggestion-desc">尊重系统"减少动态效果"设置，禁用动画。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">92</div><div class="suggestion-content"><div class="suggestion-title">字体大小跟随系统</div><div class="suggestion-desc">UI 文字大小应响应系统辅助功能中的文字大小设置。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">93</div><div class="suggestion-content"><div class="suggestion-title">日文/繁体中文支持</div><div class="suggestion-desc">扩展 localization 支持更多语言。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">94</div><div class="suggestion-content"><div class="suggestion-title">色盲友好模式</div><div class="suggestion-desc">状态颜色增加形状/图案区分，不纯依赖颜色。</div><span class="priority priority-medium">中</span></div></div>
+</div>
+
+<!-- 10. 开发者体验 -->
+<div class="category cat-dx">
+  <div class="category-header">
+    <div class="category-icon">🛠️</div>
+    <div class="category-title">开发者体验</div>
+    <div class="category-count">6 条</div>
+  </div>
+  <div class="suggestion"><div class="suggestion-num">95</div><div class="suggestion-content"><div class="suggestion-title">Debug 面板</div><div class="suggestion-desc">隐藏的开发面板显示当前状态推断逻辑、DB 查询结果、缓存命中率。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">96</div><div class="suggestion-content"><div class="suggestion-title">Mock 数据模式</div><div class="suggestion-desc">无需真实 opencode 运行即可测试 UI，使用预设的 mock session 数据。</div><span class="priority priority-high">高</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">97</div><div class="suggestion-content"><div class="suggestion-title">热重载 UI</div><div class="suggestion-desc">开发时修改 UI 代码后自动重新加载，无需完整重启 app。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">98</div><div class="suggestion-content"><div class="suggestion-title">UI 快照测试</div><div class="suggestion-desc">为每个 HUD/窗口添加快照测试，防止视觉回归。</div><span class="priority priority-medium">中</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">99</div><div class="suggestion-content"><div class="suggestion-title">性能 Profiling 工具</div><div class="suggestion-desc">内置简单的性能指标收集，显示 poll 耗时、渲染帧率等。</div><span class="priority priority-low">低</span></div></div>
+  <div class="suggestion"><div class="suggestion-num">100</div><div class="suggestion-content"><div class="suggestion-title">Changelog 自动生成</div><div class="suggestion-desc">基于 git commit 自动生成版本更新日志，显示在 app 的 About 面板中。</div><span class="priority priority-low">低</span></div></div>
+</div>
+
+<footer>
+  OpenCodeMonitor &middot; 100 Suggestions &middot; Generated 2026-08-19
+</footer>
+
+</div>
+</body>
+</html>

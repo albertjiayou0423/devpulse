@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevPulse — Brand Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0a0a0f;
+    --bg-elevated: #12121a;
+    --bg-card: #1a1a24;
+    --border: #2a2a36;
+    --text: #f0f0f5;
+    --text-secondary: #8a8a9a;
+    --text-muted: #5a5a6a;
+    
+    --coral: #FF6B6B;
+    --coral-light: #FF8E8E;
+    --gold: #FFB347;
+    --cyan: #32ADE6;
+    --green: #34C759;
+    --orange: #FF9500;
+    --red: #FF3B30;
+    --gray: #8E8E93;
+    --purple: #AF52DE;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+  
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 80px;
+    position: relative;
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255,107,107,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 48px;
+  }
+  
+  .hero-logo {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 32px;
+  }
+  
+  .hero-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(64px, 10vw, 120px);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  
+  .hero-title em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .hero-subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+  
+  .section {
+    margin-bottom: 100px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .section:last-child { border-bottom: none; }
+  
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--coral);
+    font-weight: 500;
+  }
+  
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    font-weight: 400;
+  }
+  
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+  
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  
+  .logo-card {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  
+  .logo-card.bg-dark { background: var(--bg); }
+  .logo-card.bg-elevated { background: var(--bg-elevated); }
+  .logo-card.bg-gradient { background: linear-gradient(135deg, var(--coral) 0%, var(--gold) 100%); }
+  
+  .logo-mark { width: 100px; height: 100px; }
+  
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  
+  .color-swatch {
+    aspect-ratio: 0.75;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+  
+  .color-swatch .name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  
+  .color-swatch .hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+  
+  .color-swatch .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+  
+  .color-swatch.coral { background: var(--coral); }
+  .color-swatch.gold { background: var(--gold); }
+  .color-swatch.green { background: var(--green); }
+  .color-swatch.cyan { background: var(--cyan); }
+  .color-swatch.orange { background: var(--orange); }
+  .color-swatch.red { background: var(--red); }
+  .color-swatch.gray { background: var(--gray); }
+  
+  .color-legend {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+  
+  .color-legend span { color: var(--text-secondary); }
+  
+  .type-block {
+    margin-bottom: 48px;
+    padding: 32px;
+    background: var(--bg-elevated);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  
+  .type-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 20px;
+  }
+  
+  .type-display {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  
+  .type-display em {
+    font-style: italic;
+    color: var(--coral);
+  }
+  
+  .type-body-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 520px;
+  }
+  
+  .type-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    background: var(--bg);
+    padding: 20px 24px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  
+  .type-code .comment { color: var(--text-muted); }
+  .type-code .keyword { color: var(--coral); }
+  .type-code .string { color: var(--green); }
+  .type-code .number { color: var(--gold); }
+  
+  .icon-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  
+  .icon-item { text-align: center; }
+  
+  .icon-box {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 22%;
+    margin-bottom: 10px;
+  }
+  
+  .icon-box.s1 { width: 180px; height: 180px; border-radius: 40px; }
+  .icon-box.s2 { width: 100px; height: 100px; border-radius: 22px; }
+  .icon-box.s3 { width: 64px; height: 64px; border-radius: 14px; }
+  .icon-box.s4 { width: 40px; height: 40px; border-radius: 9px; }
+  .icon-box.s5 { width: 24px; height: 24px; border-radius: 5px; }
+  
+  .icon-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+  
+  .icon-svg { width: 50%; height: 50%; }
+  
+  .status-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  
+  .status-card {
+    padding: 20px;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+  }
+  
+  .status-dot.idle { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .status-dot.working { background: var(--coral); box-shadow: 0 0 8px var(--coral); }
+  .status-dot.thinking { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .status-dot.compacting { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+  .status-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  
+  .status-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  
+  .status-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  
+  .slogan-area {
+    padding: 60px 0;
+    text-align: center;
+  }
+  
+  .slogan-main {
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  
+  .slogan-main em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .slogan-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  
+  .motion-box {
+    padding: 48px;
+    background: var(--bg-elevated);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    gap: 48px;
+    align-items: center;
+  }
+  
+  .pulse-ring {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--coral);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 1; border-color: var(--coral); }
+    100% { transform: scale(1.5); opacity: 0; border-color: var(--gold); }
+  }
+  
+  .wave-track {
+    flex: 1;
+    height: 48px;
+    position: relative;
+    background: var(--bg);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .wave-center {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  
+  .wave-pulse {
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--coral);
+    transform: translate(-50%, -50%);
+    animation: wave-travel 2.5s ease-in-out infinite;
+    box-shadow: 0 0 12px var(--coral);
+  }
+  
+  @keyframes wave-travel {
+    0% { left: 0; background: var(--coral); box-shadow: 0 0 12px var(--coral); }
+    50% { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+    100% { left: 100%; background: var(--green); box-shadow: 0 0 12px var(--green); }
+  }
+  
+  .motion-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  
+  footer {
+    padding: 48px 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <div class="hero-meta">Brand Identity / 2026</div>
+  
+  <svg class="hero-logo" viewBox="0 0 72 72" fill="none">
+    <circle cx="36" cy="36" r="34" stroke="#FF6B6B" stroke-width="1.5" stroke-opacity="0.4"/>
+    <path d="M18 36 L26 36 L30 24 L36 48 L42 28 L46 36 L54 36" stroke="url(#hero-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <defs>
+      <linearGradient id="hero-grad" x1="18" y1="36" x2="54" y2="36">
+        <stop offset="0%" stop-color="#FF6B6B"/>
+        <stop offset="100%" stop-color="#FFB347"/>
+      </linearGradient>
+    </defs>
+  </svg>
+  
+  <h1 class="hero-title">Dev<em>Pulse</em></h1>
+  <p class="hero-subtitle">Your code's heartbeat, always in sight. A monitoring companion for developers who care about the rhythm of their work.</p>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 class="section-title">Logo</h2>
+  </div>
+  
+  <p class="section-desc">脉搏波形 + 圆形边界。圆形代表监控的边界，波形代表代码的生命力。渐变色从珊瑚橙到琥珀金，温暖而有力，在暗色背景下极具辨识度。</p>
+  
+  <div class="logo-grid">
+    <div class="logo-card bg-dark">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="46" stroke="#FF6B6B" stroke-width="1.5" stroke-opacity="0.4"/>
+        <path d="M25 50 L35 50 L40 35 L50 65 L60 40 L65 50 L75 50" stroke="#FF6B6B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-card bg-elevated">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="46" stroke="#FFB347" stroke-width="1.5" stroke-opacity="0.4"/>
+        <path d="M25 50 L35 50 L40 35 L50 65 L60 40 L65 50 L75 50" stroke="#FFB347" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-card bg-gradient">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none">
+        <path d="M25 50 L35 50 L40 35 L50 65 L60 40 L65 50 L75 50" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 class="section-title">Colors</h2>
+  </div>
+  
+  <p class="section-desc">品牌色珊瑚橙 + 琥珀金，温暖、大胆、不 AI。状态色保留应用原有的系统色，确保品牌和应用视觉统一。</p>
+  
+  <div class="color-grid">
+    <div class="color-swatch coral">
+      <div class="name">Coral</div>
+      <div class="hex">#FF6B6B</div>
+      <div class="role">Brand</div>
+    </div>
+    <div class="color-swatch gold">
+      <div class="name">Gold</div>
+      <div class="hex">#FFB347</div>
+      <div class="role">Accent</div>
+    </div>
+    <div class="color-swatch green">
+      <div class="name">Green</div>
+      <div class="hex">#34C759</div>
+      <div class="role">.idle</div>
+    </div>
+    <div class="color-swatch cyan">
+      <div class="name">Cyan</div>
+      <div class="hex">#32ADE6</div>
+      <div class="role">.thinking</div>
+    </div>
+    <div class="color-swatch orange">
+      <div class="name">Orange</div>
+      <div class="hex">#FF9500</div>
+      <div class="role">.compact</div>
+    </div>
+    <div class="color-swatch red">
+      <div class="name">Red</div>
+      <div class="hex">#FF3B30</div>
+      <div class="role">.error</div>
+    </div>
+    <div class="color-swatch gray">
+      <div class="name">Gray</div>
+      <div class="hex">#8E8E93</div>
+      <div class="role">.inactive</div>
+    </div>
+  </div>
+  
+  <div class="color-legend">
+    <span>Coral</span> — 品牌主色，Logo，CTA，关键强调<br>
+    <span>Gold</span> — 品牌辅助色，渐变终点，高亮<br>
+    <span>Green</span> — idle 状态，成功/完成<br>
+    <span>Cyan</span> — thinking 状态<br>
+    <span>Orange</span> — compacting 状态<br>
+    <span>Red</span> — error 状态<br>
+    <span>Gray</span> — inactive 状态
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 class="section-title">Typography</h2>
+  </div>
+  
+  <p class="section-desc">Instrument Serif 用于品牌标题，带有编辑感和个性。Inter 用于 UI 正文，清晰中性。JetBrains Mono 用于代码和技术标签，开发者的母语。</p>
+  
+  <div class="type-block">
+    <div class="type-label">Display / Instrument Serif</div>
+    <div class="type-display">Dev<em>Pulse</em></div>
+    <div class="type-display" style="font-size: 40px; margin-top: 16px;">The rhythm of code</div>
+  </div>
+  
+  <div class="type-block">
+    <div class="type-label">Body / Inter</div>
+    <div class="type-body-text">DevPulse monitors your opencode sessions in real-time. Visual feedback on agent states, token usage, and task completion — right in your menu bar.</div>
+  </div>
+  
+  <div class="type-block">
+    <div class="type-label">Mono / JetBrains Mono</div>
+    <div class="type-code">
+      <span class="comment">// session status</span><br>
+      <span class="keyword">let</span> state = <span class="string">"working"</span><br>
+      <span class="keyword">let</span> tokens = <span class="number">42_891</span> / <span class="number">128_000</span><br>
+      <span class="keyword">let</span> duration = <span class="string">"14m 23s"</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2 class="section-title">App Icon</h2>
+  </div>
+  
+  <p class="section-desc">深色背景 + 珊瑚橙脉搏波形。22% 圆角遵循 Apple 规范。在小尺寸下加粗线条保证可读性。</p>
+  
+  <div class="icon-row">
+    <div class="icon-item">
+      <div class="icon-box s1">
+        <svg class="icon-svg" viewBox="0 0 80 80" fill="none">
+          <path d="M20 40 L30 40 L34 28 L40 52 L46 32 L50 40 L60 40" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="icon-label">180px</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-box s2">
+        <svg class="icon-svg" viewBox="0 0 80 80" fill="none">
+          <path d="M20 40 L30 40 L34 28 L40 52 L46 32 L50 40 L60 40" stroke="#FF6B6B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="icon-label">100px</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-box s3">
+        <svg class="icon-svg" viewBox="0 0 80 80" fill="none">
+          <path d="M20 40 L30 40 L34 28 L40 52 L46 32 L50 40 L60 40" stroke="#FF6B6B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="icon-label">64px</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-box s4">
+        <svg class="icon-svg" viewBox="0 0 80 80" fill="none">
+          <path d="M20 40 L30 40 L34 28 L40 52 L46 32 L50 40 L60 40" stroke="#FF6B6B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="icon-label">40px</div>
+    </div>
+    <div class="icon-item">
+      <div class="icon-box s5">
+        <svg class="icon-svg" viewBox="0 0 80 80" fill="none">
+          <path d="M20 40 L30 40 L34 28 L40 52 L46 32 L50 40 L60 40" stroke="#FF6B6B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="icon-label">24px</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2 class="section-title">Status System</h2>
+  </div>
+  
+  <p class="section-desc">状态色和应用完全一致。每个状态都有对应的发光效果，在深色背景下清晰可辨。</p>
+  
+  <div class="status-row">
+    <div class="status-card">
+      <div class="status-dot idle"></div>
+      <div class="status-name">Idle</div>
+      <div class="status-desc">就绪，等待输入</div>
+    </div>
+    <div class="status-card">
+      <div class="status-dot working"></div>
+      <div class="status-name">Working</div>
+      <div class="status-desc">工具执行中</div>
+    </div>
+    <div class="status-card">
+      <div class="status-dot thinking"></div>
+      <div class="status-name">Thinking</div>
+      <div class="status-desc">模型推理中</div>
+    </div>
+    <div class="status-card">
+      <div class="status-dot compacting"></div>
+      <div class="status-name">Compact</div>
+      <div class="status-desc">上下文压缩</div>
+    </div>
+    <div class="status-card">
+      <div class="status-dot error"></div>
+      <div class="status-name">Error</div>
+      <div class="status-desc">发生错误</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2 class="section-title">Voice</h2>
+  </div>
+  
+  <div class="slogan-area">
+    <div class="slogan-main">Your code's <em>heartbeat</em>,<br>always in sight.</div>
+    <div class="slogan-sub">代码的心跳，始终在视线之内。</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2 class="section-title">Motion</h2>
+  </div>
+  
+  <p class="section-desc">脉搏式动画，颜色随状态流动。从 coral 出发，经过 gold，到达 green——对应 working → completing → idle 的完整周期。</p>
+  
+  <div class="motion-box">
+    <div class="pulse-ring"></div>
+    <div class="wave-track">
+      <div class="wave-center"></div>
+      <div class="wave-pulse"></div>
+    </div>
+    <div class="motion-tag">2.5s ease</div>
+  </div>
+</div>
+
+<footer>
+  DevPulse Brand Identity · v4.0 · 2026
+</footer>
+
+</div>
+</body>
+</html>

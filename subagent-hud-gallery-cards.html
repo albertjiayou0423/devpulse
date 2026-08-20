@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Subagent HUD Card Gallery - 100 Variants</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0f; color: #e8e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; }
+h1 { text-align: center; margin-bottom: 10px; font-size: 24px; }
+.info { text-align: center; color: #888; margin-bottom: 30px; font-size: 14px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; max-width: 1600px; margin: 0 auto; }
+.variant { background: #12121a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; position: relative; }
+.variant-number { position: absolute; top: 8px; left: 12px; font-size: 11px; color: #666; font-family: monospace; }
+.variant-name { font-size: 13px; color: #aaa; margin-bottom: 16px; text-align: center; }
+.demo-area { height: 180px; background: rgba(0,0,0,0.3); border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
+.bar { width: 200px; height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; position: relative; }
+.cards-container { position: absolute; bottom: 40px; display: flex; gap: 12px; opacity: 0; transition: opacity 0.3s; }
+.variant:hover .cards-container { opacity: 1; }
+.card { width: 140px; height: 70px; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 10px; position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-title { font-size: 11px; font-weight: 600; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-meta { font-size: 9px; color: #888; line-height: 1.4; }
+.card-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; top: 8px; right: 8px; background: #00d4ff; }
+
+.v001 .cards-container { transform: translateY(20px); }
+.v001:hover .cards-container { transform: translateY(0); }
+.v001 .card { transform: scale(0.8); }
+.v001:hover .card { transform: scale(1); }
+
+.v002 .cards-container { transform: perspective(500px) rotateX(-15deg); }
+.v002:hover .cards-container { transform: perspective(500px) rotateX(0); }
+
+.v003 .card:nth-child(1) { transform: translateX(-30px); }
+.v003 .card:nth-child(3) { transform: translateX(30px); }
+.v003:hover .card:nth-child(1) { transform: translateX(-20px); }
+.v003:hover .card:nth-child(3) { transform: translateX(20px); }
+
+.v004 .cards-container { transform: scale(0.5); }
+.v004:hover .cards-container { transform: scale(1); }
+.v004 .card { background: rgba(0,212,255,0.15); border-color: rgba(0,212,255,0.3); }
+
+.v005 .card { border-radius: 20px; }
+.v005 .card:nth-child(2) { transform: translateY(-10px); }
+
+.v006 .card { box-shadow: 0 0 20px rgba(168,85,247,0.3); }
+.v006:hover .card { box-shadow: 0 0 30px rgba(168,85,247,0.5); }
+
+.v007 .cards-container { transform: rotate(-5deg); }
+.v007:hover .cards-container { transform: rotate(0); }
+
+.v008 .card { background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(168,85,247,0.1)); }
+
+.v009 .card { border: 2px solid rgba(255,140,66,0.4); }
+.v009 .card:nth-child(1) { transform: translateY(5px); }
+.v009 .card:nth-child(3) { transform: translateY(5px); }
+
+.v010 .cards-container { filter: blur(4px); }
+.v010:hover .cards-container { filter: blur(0); }
+
+.v011 .card { background: rgba(0,0,0,0.6); border-color: rgba(0,212,255,0.5); }
+.v011 .card-dot { background: #00d4ff; box-shadow: 0 0 8px #00d4ff; }
+
+.v012 .card { border-radius: 0; }
+.v012 .card:nth-child(1) { border-radius: 10px 0 0 10px; }
+.v012 .card:nth-child(3) { border-radius: 0 10px 10px 0; }
+
+.v013 .card { transform: rotateY(15deg); }
+.v013:hover .card { transform: rotateY(0); }
+
+.v014 .card { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); }
+
+.v015 .cards-container { transform: translateY(-10px) scale(0.9); }
+.v015:hover .cards-container { transform: translateY(0) scale(1); }
+
+.v016 .card { border-width: 2px; border-style: dashed; }
+
+.v017 .card:nth-child(2) { transform: scale(1.1); z-index: 10; }
+
+.v018 .card { background: rgba(255,71,87,0.15); border-color: rgba(255,71,87,0.3); }
+
+.v019 .cards-container { transform: skewX(-5deg); }
+.v019:hover .cards-container { transform: skewX(0); }
+
+.v020 .card { box-shadow: inset 0 0 20px rgba(255,255,255,0.1); }
+
+.v021 .card { border-radius: 50% 50% 10px 10px; }
+
+.v022 .card { background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent); }
+
+.v023 .card:nth-child(1) { transform: rotate(-10deg); }
+.v023 .card:nth-child(3) { transform: rotate(10deg); }
+
+.v024 .card { border-color: rgba(236,72,153,0.4); }
+.v024 .card-dot { background: #ec4899; }
+
+.v025 .cards-container { transform: perspective(800px) rotateY(10deg); }
+.v025:hover .cards-container { transform: perspective(800px) rotateY(0); }
+
+.v026 .card { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); }
+
+.v027 .card { border-radius: 10px 10px 0 0; }
+
+.v028 .card { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+.v029 .card:nth-child(1) { transform: translateX(-10px) rotate(-5deg); }
+.v029 .card:nth-child(3) { transform: translateX(10px) rotate(5deg); }
+
+.v030 .card { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); }
+
+.v031 .cards-container { animation: float031 2s ease-in-out infinite; }
+@keyframes float031 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+.v032 .card { border-radius: 10px; position: relative; }
+.v032 .card::before { content: ''; position: absolute; inset: -1px; background: linear-gradient(45deg, #00d4ff, #a855f7); border-radius: 10px; z-index: -1; }
+
+.v033 .card { transform: translateZ(0); }
+.v033:hover .card { transform: translateZ(20px); }
+
+.v034 .card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); }
+
+.v035 .card:nth-child(2) { background: rgba(168,85,247,0.2); border-color: rgba(168,85,247,0.4); }
+
+.v036 .card { border-radius: 10px; box-shadow: 0 0 0 1px rgba(255,255,255,0.1); }
+
+.v037 .cards-container { transform: scale(0.8) rotate(-3deg); }
+.v037:hover .cards-container { transform: scale(1) rotate(0); }
+
+.v038 .card { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(168,85,247,0.2)); }
+
+.v039 .card { border: 1px solid rgba(255,255,255,0.2); border-bottom: 3px solid rgba(0,212,255,0.5); }
+
+.v040 .card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); }
+
+.v041 .card:nth-child(1) { transform: translateY(10px); opacity: 0.5; }
+.v041 .card:nth-child(3) { transform: translateY(10px); opacity: 0.5; }
+.v041:hover .card:nth-child(1) { transform: translateY(0); opacity: 1; }
+.v041:hover .card:nth-child(3) { transform: translateY(0); opacity: 1; }
+
+.v042 .card { border-radius: 20px 5px 20px 5px; }
+
+.v043 .card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+
+.v044 .cards-container { transform: perspective(600px) rotateX(10deg); }
+.v044:hover .cards-container { transform: perspective(600px) rotateX(0); }
+
+.v045 .card { box-shadow: 0 5px 15px rgba(0,212,255,0.2); }
+
+.v046 .card { border-radius: 0 10px 0 10px; }
+
+.v047 .card:nth-child(1) { transform: scale(0.9); }
+.v047 .card:nth-child(3) { transform: scale(0.9); }
+.v047:hover .card:nth-child(1) { transform: scale(1); }
+.v047:hover .card:nth-child(3) { transform: scale(1); }
+
+.v048 .card { background: linear-gradient(to right, rgba(0,212,255,0.1), rgba(168,85,247,0.1)); }
+
+.v049 .card { border: 2px solid rgba(255,255,255,0.1); }
+
+.v050 .cards-container { transform: translateY(30px) rotate(5deg); }
+.v050:hover .cards-container { transform: translateY(0) rotate(0); }
+
+.v051 .card { transform: rotateX(45deg); }
+.v051:hover .card { transform: rotateX(0); }
+
+.v052 .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); }
+
+.v053 .cards-container { transform: translateX(-20px); }
+.v053:hover .cards-container { transform: translateX(0); }
+
+.v054 .card { border-radius: 10px; background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(236,72,153,0.15)); }
+
+.v055 .card { box-shadow: 0 0 0 2px rgba(0,212,255,0.3); }
+
+.v056 .card:nth-child(1) { transform: translateY(-5px); }
+.v056 .card:nth-child(3) { transform: translateY(-5px); }
+
+.v057 .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(0,212,255,0.2); }
+
+.v058 .cards-container { transform: perspective(400px) rotateY(-20deg); }
+.v058:hover .cards-container { transform: perspective(400px) rotateY(0); }
+
+.v059 .card { border-radius: 15px 5px 15px 5px; }
+
+.v060 .card { background: rgba(0,0,0,0.5); border: 1px solid rgba(168,85,247,0.3); }
+
+.v061 .card { transform: scale(0.7) rotate(10deg); }
+.v061:hover .card { transform: scale(1) rotate(0); }
+
+.v062 .card { box-shadow: 0 8px 20px rgba(168,85,247,0.3); }
+
+.v063 .card { background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); }
+
+.v064 .cards-container { transform: translateY(15px) scale(0.85); }
+.v064:hover .cards-container { transform: translateY(0) scale(1); }
+
+.v065 .card { border: 1px solid rgba(255,140,66,0.4); border-radius: 8px; }
+
+.v066 .card:nth-child(2) { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,212,255,0.3); }
+
+.v067 .card { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25); }
+
+.v068 .cards-container { transform: rotate(3deg); }
+.v068:hover .cards-container { transform: rotate(0); }
+
+.v069 .card { border-radius: 12px; background: rgba(255,255,255,0.06); }
+
+.v070 .card { box-shadow: inset 0 0 15px rgba(168,85,247,0.2); }
+
+.v071 .card { transform: translateX(-15px) rotate(-8deg); }
+.v071:hover .card { transform: translateX(0) rotate(0); }
+
+.v072 .card { background: linear-gradient(45deg, rgba(0,212,255,0.15), rgba(168,85,247,0.15)); }
+
+.v073 .card { border: 2px solid rgba(255,255,255,0.15); border-radius: 6px; }
+
+.v074 .cards-container { transform: scale(1.1); }
+.v074:hover .cards-container { transform: scale(1); }
+
+.v075 .card { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); }
+
+.v076 .card { border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.v077 .card:nth-child(1) { transform: rotate(-15deg) translateX(-10px); }
+.v077 .card:nth-child(3) { transform: rotate(15deg) translateX(10px); }
+
+.v078 .card { background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.25); }
+
+.v079 .cards-container { transform: perspective(700px) rotateX(-10deg); }
+.v079:hover .cards-container { transform: perspective(700px) rotateX(0); }
+
+.v080 .card { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.2); }
+
+.v081 .card { transform: translateY(20px) scale(0.9); opacity: 0; }
+.v081:hover .card { transform: translateY(0) scale(1); opacity: 1; }
+.v081 .card:nth-child(1) { transition-delay: 0s; }
+.v081 .card:nth-child(2) { transition-delay: 0.1s; }
+.v081 .card:nth-child(3) { transition-delay: 0.2s; }
+
+.v082 .card { border-radius: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,212,255,0.3); }
+
+.v083 .card { box-shadow: 0 0 25px rgba(236,72,153,0.3); }
+
+.v084 .cards-container { transform: translateX(20px); }
+.v084:hover .cards-container { transform: translateX(0); }
+
+.v085 .card { background: linear-gradient(to right, rgba(168,85,247,0.15), rgba(0,212,255,0.15)); }
+
+.v086 .card { border: 1px solid rgba(255,255,255,0.25); border-radius: 15px; }
+
+.v087 .card:nth-child(1) { transform: translateY(8px); }
+.v087 .card:nth-child(2) { transform: translateY(0); }
+.v087 .card:nth-child(3) { transform: translateY(8px); }
+
+.v088 .card { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); }
+
+.v089 .cards-container { transform: rotate(-3deg) scale(0.95); }
+.v089:hover .cards-container { transform: rotate(0) scale(1); }
+
+.v090 .card { border-radius: 8px; background: rgba(255,255,255,0.07); box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+
+.v091 .card { transform: perspective(500px) rotateY(25deg); }
+.v091:hover .card { transform: perspective(500px) rotateY(0); }
+
+.v092 .card { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(255,140,66,0.2)); border: 1px solid rgba(255,255,255,0.2); }
+
+.v093 .card { border: 2px solid rgba(168,85,247,0.4); border-radius: 12px; }
+
+.v094 .cards-container { transform: translateY(-15px); }
+.v094:hover .cards-container { transform: translateY(0); }
+
+.v095 .card { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25); }
+
+.v096 .card { border-radius: 18px; box-shadow: 0 0 30px rgba(0,212,255,0.25); }
+
+.v097 .card:nth-child(1) { transform: rotate(-20deg); }
+.v097 .card:nth-child(2) { transform: scale(1.05); }
+.v097 .card:nth-child(3) { transform: rotate(20deg); }
+
+.v098 .card { background: linear-gradient(to bottom, rgba(168,85,247,0.15), rgba(0,0,0,0.3)); }
+
+.v099 .cards-container { transform: perspective(600px) rotateX(15deg) translateY(10px); }
+.v099:hover .cards-container { transform: perspective(600px) rotateX(0) translateY(0); }
+
+.v100 .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,212,255,0.2); }
+</style>
+</head>
+<body>
+<h1>Subagent HUD Card Gallery - 100 Variants</h1>
+<div class="info">鼠标悬停预览动画效果 | 告诉我你喜欢的编号（001-100）</div>
+<div class="gallery" id="gallery"></div>
+<script>
+const names = [
+  "Fade Up", "Perspective Tilt", "Spread Out", "Scale In", "Pill Shape",
+  "Glow Purple", "Rotate Entry", "Gradient BG", "Border Accent", "Blur Reveal",
+  "Neon Cyan", "Sharp Corners", "3D Flip", "Green Accent", "Slide Scale",
+  "Dashed Border", "Center Pop", "Red Accent", "Skew Entry", "Inner Shadow",
+  "Rounded Top", "Gradient Fade", "Fan Out", "Pink Accent", "3D Rotate Y",
+  "Blue Accent", "Flat Bottom", "Deep Shadow", "Tilt Spread", "Orange Accent",
+  "Float Animation", "Gradient Border", "Z-Lift", "Heavy Blur", "Purple Center",
+  "Double Border", "Scale Rotate", "Dual Gradient", "Bottom Border", "Dark Glass",
+  "Stagger Fade", "Asymmetric Radius", "Light Glass", "Perspective X", "Cyan Glow",
+  "Slanted Corners", "Side Scale", "Right Gradient", "Thick Border", "Rise Rotate",
+  "3D Flip X", "Light Border", "Slide Left", "Dual Gradient", "Cyan Ring",
+  "Stagger Height", "Cyan Glass", "3D Rotate Y", "Asymmetric Round", "Dark Purple",
+  "Scale Rotate", "Diagonal Gradient", "Thick Light", "Scale Down", "Green Glass",
+  "Pill Shadow", "Fan Spread", "Red Glass", "Perspective Tilt", "Light Gradient",
+  "Stagger Delay", "Dark Cyan", "Pink Glow", "Slide Right", "Purple Cyan",
+  "Thin Border", "Wave Height", "Orange Glass", "Rotate Scale", "Dark Shadow",
+  "3D Flip Y", "Cyan Orange", "Purple Ring", "Rise Up", "Blue Glass",
+  "Glow Cyan", "Extreme Fan", "Purple Gradient", "Complex 3D", "Final Glass"
+];
+
+const gallery = document.getElementById('gallery');
+for (let i = 0; i < 100; i++) {
+  const num = String(i + 1).padStart(3, '0');
+  const variant = document.createElement('div');
+  variant.className = `variant v${num}`;
+  variant.innerHTML = `
+    <div class="variant-number">#${num}</div>
+    <div class="variant-name">${names[i]}</div>
+    <div class="demo-area">
+      <div class="bar"></div>
+      <div class="cards-container">
+        <div class="card">
+          <div class="card-dot"></div>
+          <div class="card-title">Subagent A</div>
+          <div class="card-meta">思考中<br/>gpt-4</div>
+        </div>
+        <div class="card">
+          <div class="card-dot"></div>
+          <div class="card-title">Subagent B</div>
+          <div class="card-meta">工作中<br/>claude-3</div>
+        </div>
+        <div class="card">
+          <div class="card-dot"></div>
+          <div class="card-title">Subagent C</div>
+          <div class="card-meta">就绪<br/>gpt-4</div>
+        </div>
+      </div>
+    </div>
+  `;
+  gallery.appendChild(variant);
+}
+</script>
+</body>
+</html>
