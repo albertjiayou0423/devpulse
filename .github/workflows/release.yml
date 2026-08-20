@@ -1,13 +1,17 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
-      - 'release/*'
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v0.2.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -20,40 +24,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Get version
-        id: version
-        run: |
-          if [[ "${{ github.ref }}" == refs/heads/main ]]; then
-            VERSION="v$(date +'%Y.%m.%d')-${GITHUB_SHA::7}"
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "prerelease=false" >> $GITHUB_OUTPUT
-          else
-            BRANCH_NAME=${GITHUB_REF#refs/heads/}
-            VERSION="pre-${BRANCH_NAME//\//-}-$(date +'%Y%m%d%H%M')"
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "prerelease=true" >> $GITHUB_OUTPUT
-          fi
-      
       - name: Build app
         run: |
-          swiftc -O Sources/OpenCodeMonitor/main.swift -o OpenCodeMonitor \
+          swiftc -O Sources/OpenCodeMonitor/main.swift -o DevPulse \
             -Xlinker -lsqlite3 -framework Cocoa -framework ServiceManagement
           
           # Create app bundle structure
-          mkdir -p OpenCodeMonitor.app/Contents/MacOS
-          mkdir -p OpenCodeMonitor.app/Contents/Resources
+          mkdir -p DevPulse.app/Contents/MacOS
+          mkdir -p DevPulse.app/Contents/Resources
           
           # Copy binary
-          cp OpenCodeMonitor OpenCodeMonitor.app/Contents/MacOS/OpenCodeMonitor
+          cp DevPulse DevPulse.app/Contents/MacOS/DevPulse
           
           # Create Info.plist
-          cat > OpenCodeMonitor.app/Contents/Info.plist << 'EOF'
+          cat > DevPulse.app/Contents/Info.plist << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
               <key>CFBundleExecutable</key>
-              <string>OpenCodeMonitor</string>
+              <string>DevPulse</string>
               <key>CFBundleIdentifier</key>
               <string>com.devpulse.app</string>
               <key>CFBundleName</key>
@@ -77,23 +67,23 @@ jobs:
             --window-pos 200 120 \
             --window-size 660 400 \
             --icon-size 128 \
-            --icon "OpenCodeMonitor.app" 165 200 \
-            --hide-extension "OpenCodeMonitor.app" \
+            --icon "DevPulse.app" 165 200 \
+            --hide-extension "DevPulse.app" \
             --app-drop-link 495 200 \
             "DevPulse.dmg" \
-            "OpenCodeMonitor.app"
+            "DevPulse.app"
       
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: DevPulse.dmg
-          name: DevPulse ${{ steps.version.outputs.version }}
-          tag_name: ${{ steps.version.outputs.version }}
-          prerelease: ${{ steps.version.outputs.prerelease }}
+          name: DevPulse ${{ inputs.version }}
+          tag_name: ${{ inputs.version }}
+          prerelease: ${{ inputs.prerelease }}
           body: |
-            ## DevPulse ${{ steps.version.outputs.version }}
+            ## DevPulse ${{ inputs.version }}
             
-            ${{ steps.version.outputs.prerelease == 'true' && '🚧 Pre-release build' || '✅ Stable release' }}
+            ${{ inputs.prerelease && '🚧 Pre-release build' || '✅ Stable release' }}
             
             ### Installation
             
