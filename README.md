@@ -8,6 +8,7 @@ A macOS menu bar app that monitors your [opencode](https://github.com/opencode-a
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Version](https://img.shields.io/badge/version-0.1.0-green)
 [![Download](https://img.shields.io/badge/download-v0.1.0-brightgreen)](https://github.com/albertjiayou0423/devpulse/releases/download/v0.1.0/DevPulse-v0.1.0.zip)
+[![Patreon](https://img.shields.io/badge/support-patreon-orange?logo=patreon&logoColor=white)](https://www.patreon.com/cw/huo_sai)
 
 ## ✨ Features
 
@@ -98,6 +99,16 @@ open OpenCodeMonitor.app
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## ☕ Support
+
+If you find DevPulse useful, consider supporting the project:
+
+<a href="https://www.patreon.com/cw/huo_sai">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+
+Your support helps keep this project alive and enables new features.
 
 ## 📄 License
 
