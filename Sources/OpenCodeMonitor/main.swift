@@ -503,7 +503,7 @@ class SettingsWindowController: NSWindowController {
         
         var y: CGFloat = contentHeight - 70
         
-        let loginCheckbox = NSButton(checkboxWithTitle: "开机自动启动", target: nil, action: #selector(loginToggled(_:)))
+        let loginCheckbox = NSButton(checkboxWithTitle: t("settings.launchAtLogin"), target: nil, action: #selector(loginToggled(_:)))
         loginCheckbox.frame = NSRect(x: 40, y: y, width: 300, height: 24)
         loginCheckbox.state = SettingsManager.shared.launchAtLogin ? .on : .off
         loginCheckbox.target = self
@@ -511,7 +511,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 35
 
-        let apiServiceCheckbox = NSButton(checkboxWithTitle: "启动时自动开启 OpenCode API 服务", target: nil, action: #selector(apiServiceToggled(_:)))
+        let apiServiceCheckbox = NSButton(checkboxWithTitle: t("settings.autoStartAPI"), target: nil, action: #selector(apiServiceToggled(_:)))
         apiServiceCheckbox.frame = NSRect(x: 40, y: y, width: 340, height: 24)
         apiServiceCheckbox.state = SettingsManager.shared.autoStartAPIService ? .on : .off
         apiServiceCheckbox.target = self
@@ -519,7 +519,7 @@ class SettingsWindowController: NSWindowController {
 
         y -= 45
         
-        let zenCheckbox = NSButton(checkboxWithTitle: "全屏时自动隐藏 (专注模式)", target: nil, action: #selector(zenToggled(_:)))
+        let zenCheckbox = NSButton(checkboxWithTitle: t("settings.zenMode"), target: nil, action: #selector(zenToggled(_:)))
         zenCheckbox.frame = NSRect(x: 40, y: y, width: 300, height: 24)
         zenCheckbox.state = SettingsManager.shared.zenMode ? .on : .off
         zenCheckbox.target = self
@@ -527,7 +527,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 35
         
-        let miniCheckbox = NSButton(checkboxWithTitle: "Mini 悬浮球模式 (小圆点)", target: nil, action: #selector(miniToggled(_:)))
+        let miniCheckbox = NSButton(checkboxWithTitle: t("settings.miniMode"), target: nil, action: #selector(miniToggled(_:)))
         miniCheckbox.frame = NSRect(x: 40, y: y, width: 300, height: 24)
         miniCheckbox.state = SettingsManager.shared.miniMode ? .on : .off
         miniCheckbox.target = self
@@ -535,7 +535,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 35
         
-        let customPosCheckbox = NSButton(checkboxWithTitle: "使用自定义位置", target: nil, action: #selector(customPosToggled(_:)))
+        let customPosCheckbox = NSButton(checkboxWithTitle: t("settings.customPosition"), target: nil, action: #selector(customPosToggled(_:)))
         customPosCheckbox.frame = NSRect(x: 40, y: y, width: 200, height: 24)
         customPosCheckbox.state = SettingsManager.shared.useCustomPosition ? .on : .off
         customPosCheckbox.target = self
@@ -565,14 +565,17 @@ class SettingsWindowController: NSWindowController {
         
         y -= 35
         
-        let archiveLabel = NSTextField(labelWithString: "Session 归档天数:")
+        let archiveLabel = NSTextField(labelWithString: t("settings.archiveDays"))
         archiveLabel.font = NSFont.systemFont(ofSize: 12)
         archiveLabel.frame = NSRect(x: 40, y: y + 4, width: 120, height: 20)
         container.addSubview(archiveLabel)
         
         let archivePopup = NSPopUpButton(frame: NSRect(x: 170, y: y, width: 100, height: 26))
         let archiveDays = SettingsManager.shared.archiveDays
-        let archiveOptions: [(String, Int)] = [("3 天", 3), ("7 天", 7), ("14 天", 14), ("30 天", 30), ("永不", 999)]
+        let archiveOptions: [(String, Int)] = [
+            (t("archive.3days"), 3), (t("archive.7days"), 7), (t("archive.14days"), 14), 
+            (t("archive.30days"), 30), (t("archive.never"), 999)
+        ]
         for (label, value) in archiveOptions {
             archivePopup.addItem(withTitle: label)
             archivePopup.lastItem?.representedObject = value
@@ -586,14 +589,14 @@ class SettingsWindowController: NSWindowController {
         
         y -= 45
         
-        let langLabel = NSTextField(labelWithString: "语言:")
+        let langLabel = NSTextField(labelWithString: t("settings.language"))
         langLabel.font = NSFont.systemFont(ofSize: 12)
         langLabel.frame = NSRect(x: 40, y: y + 4, width: 80, height: 20)
         container.addSubview(langLabel)
         
         let langPopup = NSPopUpButton(frame: NSRect(x: 130, y: y, width: 120, height: 26))
         let currentLang = SettingsManager.shared.language
-        let langOptions: [(String, String)] = [("自动", "auto"), ("中文", "zh"), ("English", "en")]
+        let langOptions: [(String, String)] = [("Auto", "auto"), ("中文", "zh"), ("English", "en")]
         for (label, value) in langOptions {
             langPopup.addItem(withTitle: label)
             langPopup.lastItem?.representedObject = value
@@ -607,7 +610,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 35
         
-        let devModeCheckbox = NSButton(checkboxWithTitle: "开发者模式", target: nil, action: #selector(devModeToggled(_:)))
+        let devModeCheckbox = NSButton(checkboxWithTitle: t("settings.devMode"), target: nil, action: #selector(devModeToggled(_:)))
         devModeCheckbox.frame = NSRect(x: 40, y: y, width: 300, height: 24)
         devModeCheckbox.state = SettingsManager.shared.devMode ? .on : .off
         devModeCheckbox.target = self
@@ -615,7 +618,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 45
         
-        widthLabel = NSTextField(labelWithString: "指示条宽度: \(Int(SettingsManager.shared.barWidth)) px")
+        widthLabel = NSTextField(labelWithString: "\(t("settings.barWidth")): \(Int(SettingsManager.shared.barWidth)) px")
         widthLabel.frame = NSRect(x: 40, y: y + 22, width: 300, height: 20)
         container.addSubview(widthLabel)
         
@@ -625,7 +628,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 55
         
-        opacityLabel = NSTextField(labelWithString: "指示条透明度: \(Int(SettingsManager.shared.barOpacity * 100))%")
+        opacityLabel = NSTextField(labelWithString: "\(t("settings.barOpacity")): \(Int(SettingsManager.shared.barOpacity * 100))%")
         opacityLabel.frame = NSRect(x: 40, y: y + 22, width: 300, height: 20)
         container.addSubview(opacityLabel)
         
@@ -635,7 +638,7 @@ class SettingsWindowController: NSWindowController {
         
         y -= 55
         
-        let contextLabel = NSTextField(labelWithString: "上下文窗口限制:")
+        let contextLabel = NSTextField(labelWithString: t("settings.contextLimit"))
         contextLabel.font = NSFont.systemFont(ofSize: 12)
         contextLabel.frame = NSRect(x: 40, y: y + 4, width: 120, height: 20)
         container.addSubview(contextLabel)
@@ -660,22 +663,22 @@ class SettingsWindowController: NSWindowController {
         
         y -= 60
         
-        let colorTitle = NSTextField(labelWithString: "自定义状态颜色:")
+        let colorTitle = NSTextField(labelWithString: t("settings.customColors"))
         colorTitle.font = NSFont.boldSystemFont(ofSize: 12)
         colorTitle.frame = NSRect(x: 40, y: y, width: 120, height: 20)
         container.addSubview(colorTitle)
         
         y -= 35
-        addColorWell(to: container, label: "就绪 (绿):", state: .idle, x: 40, y: y)
-        addColorWell(to: container, label: "思考 (青):", state: .thinking, x: 240, y: y)
+        addColorWell(to: container, label: t("color.idle"), state: .idle, x: 40, y: y)
+        addColorWell(to: container, label: t("color.thinking"), state: .thinking, x: 240, y: y)
         
         y -= 35
-        addColorWell(to: container, label: "工作 (紫):", state: .working, x: 40, y: y)
-        addColorWell(to: container, label: "报错 (红):", state: .error, x: 240, y: y)
+        addColorWell(to: container, label: t("color.working"), state: .working, x: 40, y: y)
+        addColorWell(to: container, label: t("color.error"), state: .error, x: 240, y: y)
         
         y -= 55
         
-        let resetButton = NSButton(title: "恢复默认设置", target: self, action: #selector(resetClicked(_:)))
+        let resetButton = NSButton(title: t("settings.resetDefaults"), target: self, action: #selector(resetClicked(_:)))
         resetButton.bezelStyle = .rounded
         resetButton.frame = NSRect(x: 40, y: y, width: 120, height: 32)
         container.addSubview(resetButton)
@@ -763,6 +766,11 @@ class SettingsWindowController: NSWindowController {
         if let value = sender.selectedItem?.representedObject as? String {
             SettingsManager.shared.language = value
             NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
+            
+            // Close and reopen settings window to refresh UI
+            self.window?.close()
+            
+            // Notify AppDelegate to rebuild menu
             NotificationCenter.default.post(name: NSNotification.Name("LanguageChanged"), object: nil)
         }
     }
@@ -789,14 +797,14 @@ class SettingsWindowController: NSWindowController {
     @objc private func widthChanged(_ sender: NSSlider) {
         let val = CGFloat(sender.intValue)
         SettingsManager.shared.barWidth = val
-        widthLabel.stringValue = "指示条宽度: \(Int(val)) px"
+        widthLabel.stringValue = "\(t("settings.barWidth")): \(Int(val)) px"
         NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
     }
     
     @objc private func opacityChanged(_ sender: NSSlider) {
         let val = sender.doubleValue
         SettingsManager.shared.barOpacity = val
-        opacityLabel.stringValue = "指示条透明度: \(Int(val * 100))%"
+        opacityLabel.stringValue = "\(t("settings.barOpacity")): \(Int(val * 100))%"
         NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
     }
     
@@ -2030,6 +2038,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateOverlayGeometry), name: NSNotification.Name("SettingsChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(rebuildMenu), name: NSNotification.Name("LanguageChanged"), object: nil)
+    }
+    
+    @objc func rebuildMenu() {
+        refreshSessionsList()
     }
     
     func createCircularIcon(color: NSColor = .labelColor) -> NSImage {
@@ -2651,30 +2664,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let activeSessions = sessions.filter { $0.timeUpdated > archiveThreshold || archiveDays >= 999 }
         let archivedSessions = sessions.filter { $0.timeUpdated <= archiveThreshold && archiveDays < 999 }
         
-        let processStatus = isOpencodeRunning ? "opencode 运行中" : "opencode 未运行"
+        let processStatus = isOpencodeRunning ? t("dev.running") : t("dev.notRunning")
         let processItem = NSMenuItem(title: processStatus, action: nil, keyEquivalent: "")
         processItem.isEnabled = false
         sessionsMenu.addItem(processItem)
         sessionsMenu.addItem(NSMenuItem.separator())
         
-        let currentTitle = sessions.first(where: { $0.id == selectedSessionID })?.title ?? "未选择"
+        let currentTitle = sessions.first(where: { $0.id == selectedSessionID })?.title ?? t("hud.noSession")
         let shortTitle = currentTitle.count > 25 ? String(currentTitle.prefix(25)) + "..." : currentTitle
         
-        let statusHeader = NSMenuItem(title: "正在监控: \(shortTitle)", action: nil, keyEquivalent: "")
+        let statusHeader = NSMenuItem(title: "\(t("menu.monitoring")): \(shortTitle)", action: nil, keyEquivalent: "")
         statusHeader.isEnabled = false
         sessionsMenu.addItem(statusHeader)
 
-        let debugItem = NSMenuItem(title: "状态来源: \(lastStateDebug)", action: nil, keyEquivalent: "")
+        let debugItem = NSMenuItem(title: "\(t("menu.statusSource")): \(lastStateDebug)", action: nil, keyEquivalent: "")
         debugItem.isEnabled = false
         sessionsMenu.addItem(debugItem)
         sessionsMenu.addItem(NSMenuItem.separator())
         
-        let headerItem = NSMenuItem(title: "最近会话 (点击切换):", action: nil, keyEquivalent: "")
+        let headerItem = NSMenuItem(title: t("menu.recentSessions"), action: nil, keyEquivalent: "")
         headerItem.isEnabled = false
         sessionsMenu.addItem(headerItem)
         
         if activeSessions.isEmpty && archivedSessions.isEmpty {
-            let emptyItem = NSMenuItem(title: "暂无可用会话 (请先启动 opencode)", action: nil, keyEquivalent: "")
+            let emptyItem = NSMenuItem(title: t("menu.noSessions"), action: nil, keyEquivalent: "")
             emptyItem.isEnabled = false
             sessionsMenu.addItem(emptyItem)
         } else {
@@ -2724,7 +2737,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
                 
-                let moreItem = NSMenuItem(title: "更多历史会话...", action: nil, keyEquivalent: "")
+                let moreItem = NSMenuItem(title: t("menu.moreHistory"), action: nil, keyEquivalent: "")
                 moreItem.submenu = moreSubmenu
                 sessionsMenu.addItem(moreItem)
             }
@@ -2732,23 +2745,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         sessionsMenu.addItem(NSMenuItem.separator())
         
-        let settingsItem = NSMenuItem(title: "偏好设置...", action: #selector(openSettings(_:)), keyEquivalent: ",")
+        let settingsItem = NSMenuItem(title: t("menu.settings"), action: #selector(openSettings(_:)), keyEquivalent: ",")
         settingsItem.target = self
         sessionsMenu.addItem(settingsItem)
         
-        let helpItem = NSMenuItem(title: "使用指南...", action: #selector(openOnboarding(_:)), keyEquivalent: "")
+        let helpItem = NSMenuItem(title: t("menu.guide"), action: #selector(openOnboarding(_:)), keyEquivalent: "")
         helpItem.target = self
         sessionsMenu.addItem(helpItem)
         
-        let toggleVisItem = NSMenuItem(title: "显示/隐藏指示条", action: #selector(toggleVisibility(_:)), keyEquivalent: "h")
+        let toggleVisItem = NSMenuItem(title: t("menu.toggleVisibility"), action: #selector(toggleVisibility(_:)), keyEquivalent: "h")
         toggleVisItem.target = self
         sessionsMenu.addItem(toggleVisItem)
         
-        let refreshItem = NSMenuItem(title: "刷新会话列表", action: #selector(refreshClicked(_:)), keyEquivalent: "r")
+        let refreshItem = NSMenuItem(title: t("menu.refreshSessions"), action: #selector(refreshClicked(_:)), keyEquivalent: "r")
         refreshItem.target = self
         sessionsMenu.addItem(refreshItem)
 
-        let apiServiceTitle = apiServiceProcess?.isRunning == true ? "停止 OpenCode API 服务" : (isAPIServiceRunning() ? "OpenCode API 服务已运行" : "启动 OpenCode API 服务")
+        let apiServiceTitle = apiServiceProcess?.isRunning == true ? t("menu.stopAPI") : (isAPIServiceRunning() ? t("menu.apiRunning") : t("menu.startAPI"))
         let apiServiceItem = NSMenuItem(title: apiServiceTitle, action: #selector(toggleAPIService(_:)), keyEquivalent: "")
         apiServiceItem.target = self
         apiServiceItem.isEnabled = apiServiceProcess?.isRunning == true || !isAPIServiceRunning()
@@ -2762,18 +2775,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             sessionsMenu.addItem(NSMenuItem.separator())
             
             let devModeMenu = NSMenu()
-            let devModeItem = NSMenuItem(title: "开发者模式", action: nil, keyEquivalent: "")
+            let devModeItem = NSMenuItem(title: t("menu.devMode"), action: nil, keyEquivalent: "")
             devModeItem.submenu = devModeMenu
             
-            let confettiItem = NSMenuItem(title: "测试彩带", action: #selector(testConfetti(_:)), keyEquivalent: "")
+            let confettiItem = NSMenuItem(title: t("menu.testConfetti"), action: #selector(testConfetti(_:)), keyEquivalent: "")
             confettiItem.target = self
             devModeMenu.addItem(confettiItem)
             
-            let cycleItem = NSMenuItem(title: "轮播状态演示", action: #selector(toggleStatusCycle(_:)), keyEquivalent: "")
+            let cycleItem = NSMenuItem(title: t("menu.cycleStatus"), action: #selector(toggleStatusCycle(_:)), keyEquivalent: "")
             cycleItem.target = self
             devModeMenu.addItem(cycleItem)
             
-            let debugItem = NSMenuItem(title: "调试信息", action: #selector(showDebugInfo(_:)), keyEquivalent: "")
+            let debugItem = NSMenuItem(title: "Debug Info", action: #selector(showDebugInfo(_:)), keyEquivalent: "")
             debugItem.target = self
             devModeMenu.addItem(debugItem)
             
@@ -2782,7 +2795,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         sessionsMenu.addItem(NSMenuItem.separator())
         
-        let quitItem = NSMenuItem(title: "退出 DevPulse", action: #selector(quitClicked(_:)), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: t("menu.quit"), action: #selector(quitClicked(_:)), keyEquivalent: "q")
         quitItem.target = self
         sessionsMenu.addItem(quitItem)
     }

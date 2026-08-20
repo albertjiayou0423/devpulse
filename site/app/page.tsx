@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Button, Badge, LayerCard, Tooltip } from "@cloudflare/kumo";
 import {
   Heart,
@@ -9,26 +12,7 @@ import {
   CurrencyDollar,
   ChatCircle,
   Sparkle,
-  Globe,
 } from "@phosphor-icons/react/dist/ssr";
-
-type Release = {
-  tag_name: string;
-  assets: { name: string; browser_download_url: string }[];
-};
-
-async function getLatestRelease(): Promise<Release | null> {
-  try {
-    const res = await fetch(
-      "https://api.github.com/repos/albertjiayou0423/devpulse/releases/latest",
-      { next: { revalidate: 3600 } }
-    );
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
-}
 
 type Lang = "en" | "zh";
 
@@ -83,19 +67,31 @@ const translations = {
   },
 };
 
-export default async function Home() {
-  const release = await getLatestRelease();
-  const version = release?.tag_name ?? "v0.1.1";
-  const dmgAsset = release?.assets.find((a) => a.name.endsWith(".dmg"));
-  const downloadUrl =
-    dmgAsset?.browser_download_url ??
-    "https://github.com/albertjiayou0423/devpulse/releases/latest";
+export default function Home() {
+  const [lang, setLang] = useState<Lang>("en");
+  const [version, setVersion] = useState("v0.1.1");
+  const [downloadUrl, setDownloadUrl] = useState(
+    "https://github.com/albertjiayou0423/devpulse/releases/latest"
+  );
+
+  useState(() => {
+    fetch("https://api.github.com/repos/albertjiayou0423/devpulse/releases/latest")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.tag_name) setVersion(data.tag_name);
+        const dmg = data.assets?.find((a: { name: string }) => a.name.endsWith(".dmg"));
+        if (dmg) setDownloadUrl(dmg.browser_download_url);
+      })
+      .catch(() => {});
+  });
+
+  const t = translations[lang];
 
   return (
     <main className="flex-1">
       {/* Language Switcher */}
       <div className="fixed top-4 right-4 z-50">
-        <LanguageSwitcher />
+        <LanguageSwitcher lang={lang} setLang={setLang} />
       </div>
 
       {/* Hero */}
@@ -106,32 +102,33 @@ export default async function Home() {
           <Badge className="mb-8" variant="neutral">
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B] animate-pulse" />
-              {version} — {translations.en.badge}
+              {version} — {t.badge}
             </span>
           </Badge>
 
           <h1 className="text-5xl md:text-7xl font-serif leading-tight tracking-tight mb-6 max-w-3xl">
-            {translations.en.title1}{" "}
+            {lang === "zh" ? t.title1 : t.title1 + " "}
             <span className="italic bg-gradient-to-r from-[#FF6B6B] to-[#FFB347] bg-clip-text text-transparent">
-              {translations.en.title2}
+              {t.title2}
             </span>
             ,<br />
-            {translations.en.title3}
+            {lang === "zh" ? "" : t.title3}
+            {lang === "zh" ? t.title3 : ""}
           </h1>
 
           <p className="text-lg text-[#8a8a9a] max-w-xl mb-10 leading-relaxed">
-            {translations.en.subtitle}
+            {t.subtitle}
           </p>
 
           <div className="flex gap-4 flex-wrap">
             <a href={downloadUrl} download>
               <Button variant="primary" size="lg" icon={<Download weight="bold" />}>
-                {translations.en.download}
+                {t.download}
               </Button>
             </a>
             <a href="https://github.com/albertjiayou0423/devpulse">
               <Button variant="secondary" size="lg" icon={<GithubLogo weight="bold" />}>
-                {translations.en.github}
+                {t.github}
               </Button>
             </a>
           </div>
@@ -155,13 +152,13 @@ export default async function Home() {
       <section className="px-6 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-            {translations.en.featuresLabel}
+            {t.featuresLabel}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif mb-4 max-w-2xl">
-            {translations.en.featuresTitle}
+            {t.featuresTitle}
           </h2>
           <p className="text-[#8a8a9a] mb-12 max-w-xl">
-            {translations.en.featuresDesc}
+            {t.featuresDesc}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -204,13 +201,13 @@ export default async function Home() {
         <div className="max-w-5xl mx-auto">
           <LayerCard className="p-10 md:p-16">
             <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-              {translations.en.statusLabel}
+              {t.statusLabel}
             </p>
             <h2 className="text-3xl md:text-4xl font-serif mb-4">
-              {translations.en.statusTitle}
+              {t.statusTitle}
             </h2>
             <p className="text-[#8a8a9a] mb-10 max-w-xl">
-              {translations.en.statusDesc}
+              {t.statusDesc}
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -228,13 +225,13 @@ export default async function Home() {
       <section className="px-6 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-            {translations.en.installLabel}
+            {t.installLabel}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif mb-4">
-            {translations.en.installTitle}
+            {t.installTitle}
           </h2>
           <p className="text-[#8a8a9a] mb-12 max-w-xl">
-            {translations.en.installDesc}
+            {t.installDesc}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -249,10 +246,10 @@ export default async function Home() {
       <section className="px-6 py-24">
         <div className="max-w-5xl mx-auto">
           <p className="text-[#FF6B6B] font-mono uppercase tracking-widest mb-4 text-sm">
-            {translations.en.requirementsLabel}
+            {t.requirementsLabel}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif mb-10">
-            {translations.en.requirementsTitle}
+            {t.requirementsTitle}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
@@ -307,7 +304,7 @@ export default async function Home() {
             </a>
           </div>
           <p className="text-xs font-mono text-[#5a5a6a] tracking-wide">
-            {translations.en.footer}
+            {t.footer}
           </p>
         </div>
       </footer>
@@ -315,13 +312,23 @@ export default async function Home() {
   );
 }
 
-function LanguageSwitcher() {
+function LanguageSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
     <div className="flex gap-2">
-      <button className="px-3 py-1.5 text-xs font-mono bg-[#1a1a24] border border-[#2a2a36] rounded-lg text-[#FF6B6B] hover:border-[#FF6B6B] transition-colors">
+      <button
+        onClick={() => setLang("en")}
+        className={`px-3 py-1.5 text-xs font-mono bg-[#1a1a24] border border-[#2a2a36] rounded-lg transition-colors ${
+          lang === "en" ? "text-[#FF6B6B] border-[#FF6B6B]" : "text-[#8a8a9a] hover:border-[#FF6B6B] hover:text-[#FF6B6B]"
+        }`}
+      >
         EN
       </button>
-      <button className="px-3 py-1.5 text-xs font-mono bg-[#1a1a24] border border-[#2a2a36] rounded-lg text-[#8a8a9a] hover:border-[#FF6B6B] hover:text-[#FF6B6B] transition-colors">
+      <button
+        onClick={() => setLang("zh")}
+        className={`px-3 py-1.5 text-xs font-mono bg-[#1a1a24] border border-[#2a2a36] rounded-lg transition-colors ${
+          lang === "zh" ? "text-[#FF6B6B] border-[#FF6B6B]" : "text-[#8a8a9a] hover:border-[#FF6B6B] hover:text-[#FF6B6B]"
+        }`}
+      >
         中文
       </button>
     </div>
