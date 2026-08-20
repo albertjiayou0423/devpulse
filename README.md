@@ -6,32 +6,27 @@ A macOS menu bar app that monitors your [opencode](https://github.com/opencode-a
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-orange)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
-![Version](https://img.shields.io/badge/version-0.1.0-green)
+![Version](https://img.shields.io/badge/version-0.1.1-green)
 [![Patreon](https://img.shields.io/badge/support-patreon-orange?logo=patreon&logoColor=white)](https://www.patreon.com/cw/huo_sai)
 
 **English** | [中文](./README_zh.md)
 
-## Features
+## Requirements
 
-- **Real-time monitoring** — Watch your opencode sessions as they run
-- **Status indicators** — Visual feedback for working, thinking, idle, compacting, and error states
-- **Subagent tracking** — See all child sessions with hover-to-inspect details
-- **Token usage** — Track context window consumption at a glance
-- **Question handling** — Respond to opencode questions directly from the menu bar
-- **Glass-morphism HUD** — Beautiful status list interface
+- macOS 14.0+
+- [opencode](https://github.com/opencode-ai/opencode) installed and running
 
 ## Installation
 
-### Quick Start
+### From DMG (Recommended)
 
 1. Download `DevPulse.dmg` from [Releases](https://github.com/albertjiayou0423/devpulse/releases/latest)
 2. Open the DMG and drag DevPulse to Applications folder
-3. Launch from Applications folder
+3. Launch from Applications
 
 ### From Source
 
 ```bash
-# Clone the repo
 git clone https://github.com/albertjiayou0423/devpulse.git
 cd devpulse
 
@@ -46,10 +41,14 @@ cp OpenCodeMonitor OpenCodeMonitor.app/Contents/MacOS/OpenCodeMonitor
 open OpenCodeMonitor.app
 ```
 
-### Requirements
+## Features
 
-- macOS 14.0+
-- [opencode](https://github.com/opencode-ai/opencode) installed and running
+- **Real-time monitoring** — Watch your opencode sessions as they run
+- **Status indicators** — Visual feedback for working, thinking, idle, compacting, and error states
+- **Subagent tracking** — See all child sessions with hover-to-inspect details
+- **Token usage** — Track context window consumption at a glance
+- **Question handling** — Respond to opencode questions directly from the menu bar
+- **Glass-morphism HUD** — Beautiful status list interface
 
 ## How It Works
 
@@ -75,20 +74,28 @@ DevPulse reads from opencode's SQLite database at `~/.local/share/opencode/openc
 ### Build
 
 ```bash
-# Compile
 swiftc -O Sources/OpenCodeMonitor/main.swift -o OpenCodeMonitor \
   -Xlinker -lsqlite3 -framework Cocoa -framework ServiceManagement
-
-# Deploy and restart
-cp OpenCodeMonitor OpenCodeMonitor.app/Contents/MacOS/OpenCodeMonitor
-pkill -9 OpenCodeMonitor 2>/dev/null; sleep 0.5
-open OpenCodeMonitor.app
 ```
 
 ### Create DMG Installer
 
 ```bash
-hdiutil create -volname "DevPulse" -srcfolder OpenCodeMonitor.app -ov -format UDZO DevPulse.dmg
+# Install create-dmg
+brew install create-dmg
+
+# Create DMG with Applications shortcut and custom background
+create-dmg \
+  --volname "DevPulse" \
+  --background "assets/dmg-background.png" \
+  --window-pos 200 120 \
+  --window-size 660 400 \
+  --icon-size 128 \
+  --icon "OpenCodeMonitor.app" 200 190 \
+  --hide-extension "OpenCodeMonitor.app" \
+  --app-drop-link 560 190 \
+  "DevPulse.dmg" \
+  "OpenCodeMonitor.app"
 ```
 
 ### Project Structure
@@ -99,8 +106,7 @@ devpulse/
 │   └── OpenCodeMonitor/
 │       └── main.swift          # Main app source (~3300 lines)
 ├── OpenCodeMonitor.app/        # App bundle
-├── branding.html               # Brand identity document
-├── suggestions.html            # 100 improvement suggestions
+├── assets/                     # DMG background and screenshots
 ├── README.md                   # English documentation
 └── README_zh.md                # Chinese documentation
 ```
@@ -127,15 +133,9 @@ If you find DevPulse useful, consider supporting the project:
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
-Your support helps keep this project alive and enables new features.
-
 ## License
 
 MIT © 2026
-
-## Brand
-
-See [branding.html](./branding.html) for the complete brand identity.
 
 ---
 

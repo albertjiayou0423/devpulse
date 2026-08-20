@@ -27,3 +27,6 @@ DerivedData/
 
 # Assets (screenshots, videos)
 assets/
+
+# HTML docs (local only)
+*.html
