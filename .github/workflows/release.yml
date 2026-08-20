@@ -38,7 +38,33 @@ jobs:
         run: |
           swiftc -O Sources/OpenCodeMonitor/main.swift -o OpenCodeMonitor \
             -Xlinker -lsqlite3 -framework Cocoa -framework ServiceManagement
+          
+          # Create app bundle structure
+          mkdir -p OpenCodeMonitor.app/Contents/MacOS
+          mkdir -p OpenCodeMonitor.app/Contents/Resources
+          
+          # Copy binary
           cp OpenCodeMonitor OpenCodeMonitor.app/Contents/MacOS/OpenCodeMonitor
+          
+          # Create Info.plist
+          cat > OpenCodeMonitor.app/Contents/Info.plist << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>OpenCodeMonitor</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.devpulse.app</string>
+              <key>CFBundleName</key>
+              <string>DevPulse</string>
+              <key>CFBundleVersion</key>
+              <string>1.0</string>
+              <key>LSUIElement</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
       
       - name: Install create-dmg
         run: brew install create-dmg
