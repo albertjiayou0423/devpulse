@@ -26,7 +26,10 @@ DerivedData/
 *.log
 
 # Assets (screenshots, videos)
-assets/
+assets/*.jpg
+assets/*.jpeg
+assets/*.mp4
+assets/*.mov
 
 # HTML docs (local only)
 *.html

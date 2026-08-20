@@ -41,13 +41,32 @@ cp OpenCodeMonitor OpenCodeMonitor.app/Contents/MacOS/OpenCodeMonitor
 open OpenCodeMonitor.app
 ```
 
+## Usage
+
+Once installed and launched, DevPulse appears in your menu bar:
+
+- **Status Bar** — Shows current session state with color-coded indicator
+- **Session List** — Click to switch between opencode sessions
+- **Subagent Dots** — Hover to see child session details
+- **Question Popup** — Answer opencode questions directly from the menu bar
+
+### Status Colors
+
+| Color | State | Meaning |
+|-------|-------|---------|
+| 🟢 Green | Idle | Session ready, waiting for input |
+| 🟣 Purple | Working | Tool executing |
+| 🔵 Cyan | Thinking | Model reasoning |
+| 🟠 Orange | Compacting | Context compression in progress |
+| 🔴 Red | Error | Something went wrong |
+
 ## Features
 
 - **Real-time monitoring** — Watch your opencode sessions as they run
-- **Status indicators** — Visual feedback for working, thinking, idle, compacting, and error states
+- **Status indicators** — Visual feedback for all session states
 - **Subagent tracking** — See all child sessions with hover-to-inspect details
 - **Token usage** — Track context window consumption at a glance
-- **Question handling** — Respond to opencode questions directly from the menu bar
+- **Question handling** — Respond to opencode questions directly
 - **Glass-morphism HUD** — Beautiful status list interface
 
 ## How It Works
@@ -58,16 +77,6 @@ DevPulse reads from opencode's SQLite database at `~/.local/share/opencode/openc
 - Token usage and context window consumption
 - Subagent relationships and status
 - Tool calls and their outcomes
-
-## Status Colors
-
-| Color | State | Meaning |
-|-------|-------|---------|
-| 🟢 Green | Idle | Session ready, waiting for input |
-| 🟣 Purple | Working | Tool executing |
-| 🔵 Cyan | Thinking | Model reasoning |
-| 🟠 Orange | Compacting | Context compression in progress |
-| 🔴 Red | Error | Something went wrong |
 
 ## Development
 
