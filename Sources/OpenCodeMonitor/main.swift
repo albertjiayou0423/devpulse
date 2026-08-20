@@ -114,6 +114,27 @@ class SettingsManager {
         set { UserDefaults.standard.set(newValue, forKey: "ArchiveDays") }
     }
     
+    var useCustomPosition: Bool {
+        get { UserDefaults.standard.bool(forKey: "UseCustomPosition") }
+        set { UserDefaults.standard.set(newValue, forKey: "UseCustomPosition") }
+    }
+    
+    var customX: CGFloat {
+        get {
+            let val = UserDefaults.standard.object(forKey: "CustomX") as? CGFloat
+            return val ?? 0
+        }
+        set { UserDefaults.standard.set(newValue, forKey: "CustomX") }
+    }
+    
+    var customY: CGFloat {
+        get {
+            let val = UserDefaults.standard.object(forKey: "CustomY") as? CGFloat
+            return val ?? 0
+        }
+        set { UserDefaults.standard.set(newValue, forKey: "CustomY") }
+    }
+    
     func resetToDefaults() {
         UserDefaults.standard.removeObject(forKey: "BarWidth")
         UserDefaults.standard.removeObject(forKey: "BarHeight")
@@ -123,6 +144,9 @@ class SettingsManager {
         UserDefaults.standard.removeObject(forKey: "MiniMode")
         UserDefaults.standard.removeObject(forKey: "ArchiveDays")
         UserDefaults.standard.removeObject(forKey: "AutoStartAPIService")
+        UserDefaults.standard.removeObject(forKey: "UseCustomPosition")
+        UserDefaults.standard.removeObject(forKey: "CustomX")
+        UserDefaults.standard.removeObject(forKey: "CustomY")
         for state in [SessionState.inactive, .idle, .thinking, .working, .compacting, .error] {
             UserDefaults.standard.removeObject(forKey: "Color_\(state)")
         }
@@ -273,6 +297,36 @@ class SettingsWindowController: NSWindowController {
         
         y -= 35
         
+        let customPosCheckbox = NSButton(checkboxWithTitle: "使用自定义位置", target: nil, action: #selector(customPosToggled(_:)))
+        customPosCheckbox.frame = NSRect(x: 40, y: y, width: 200, height: 24)
+        customPosCheckbox.state = SettingsManager.shared.useCustomPosition ? .on : .off
+        customPosCheckbox.target = self
+        container.addSubview(customPosCheckbox)
+        
+        let xLabel = NSTextField(labelWithString: "X:")
+        xLabel.font = NSFont.systemFont(ofSize: 11)
+        xLabel.frame = NSRect(x: 250, y: y + 4, width: 20, height: 16)
+        container.addSubview(xLabel)
+        
+        let xField = NSTextField(frame: NSRect(x: 270, y: y, width: 60, height: 24))
+        xField.integerValue = Int(SettingsManager.shared.customX)
+        xField.target = self
+        xField.action = #selector(customXChanged(_:))
+        container.addSubview(xField)
+        
+        let yLabel = NSTextField(labelWithString: "Y:")
+        yLabel.font = NSFont.systemFont(ofSize: 11)
+        yLabel.frame = NSRect(x: 340, y: y + 4, width: 20, height: 16)
+        container.addSubview(yLabel)
+        
+        let yField = NSTextField(frame: NSRect(x: 360, y: y, width: 60, height: 24))
+        yField.integerValue = Int(SettingsManager.shared.customY)
+        yField.target = self
+        yField.action = #selector(customYChanged(_:))
+        container.addSubview(yField)
+        
+        y -= 35
+        
         let archiveLabel = NSTextField(labelWithString: "Session 归档天数:")
         archiveLabel.font = NSFont.systemFont(ofSize: 12)
         archiveLabel.frame = NSRect(x: 40, y: y + 4, width: 120, height: 20)
@@ -413,6 +467,21 @@ class SettingsWindowController: NSWindowController {
     
     @objc private func miniToggled(_ sender: NSButton) {
         SettingsManager.shared.miniMode = (sender.state == .on)
+        NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
+    }
+    
+    @objc private func customPosToggled(_ sender: NSButton) {
+        SettingsManager.shared.useCustomPosition = (sender.state == .on)
+        NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
+    }
+    
+    @objc private func customXChanged(_ sender: NSTextField) {
+        SettingsManager.shared.customX = CGFloat(sender.intValue)
+        NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
+    }
+    
+    @objc private func customYChanged(_ sender: NSTextField) {
+        SettingsManager.shared.customY = CGFloat(sender.intValue)
         NotificationCenter.default.post(name: NSNotification.Name("SettingsChanged"), object: nil)
     }
     
@@ -1800,8 +1869,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         guard let screen = NSScreen.main else { return }
         let screenRect = screen.visibleFrame
-        let x = screenRect.midX - (barWidth / 2)
-        let y = screenRect.minY + 16
+        
+        var x: CGFloat
+        var y: CGFloat
+        
+        if SettingsManager.shared.useCustomPosition {
+            x = SettingsManager.shared.customX
+            y = SettingsManager.shared.customY
+        } else {
+            x = screenRect.midX - (barWidth / 2)
+            y = screenRect.minY + 16
+        }
         
         overlayWindow.setFrame(NSRect(x: x, y: y, width: barWidth, height: barHeight), display: true)
         stableBarFrame = overlayWindow.frame
