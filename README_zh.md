@@ -24,9 +24,9 @@ DevPulse 是一个 macOS 菜单栏应用，实时监控你的 [opencode](https:/
 
 ### 快速开始
 
-1. 从 [Releases](https://github.com/albertjiayou0423/devpulse/releases) 下载 `DevPulse.dmg`
+1. 从 [Releases](https://github.com/albertjiayou0423/devpulse/releases/latest) 下载 `DevPulse.dmg`
 2. 打开 DMG，将 DevPulse 拖到 Applications 文件夹
-3. 启动应用 — 菜单栏会出现状态条
+3. 从 Applications 启动应用
 
 ### 从源码构建
 

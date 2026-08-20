@@ -24,9 +24,9 @@ A macOS menu bar app that monitors your [opencode](https://github.com/opencode-a
 
 ### Quick Start
 
-1. Download `DevPulse.dmg` from the [Releases](https://github.com/albertjiayou0423/devpulse/releases) page
-2. Open the DMG and drag DevPulse to your Applications folder
-3. Launch the app — you'll see the status bar in your menu bar
+1. Download `DevPulse.dmg` from [Releases](https://github.com/albertjiayou0423/devpulse/releases/latest)
+2. Open the DMG and drag DevPulse to Applications folder
+3. Launch from Applications folder
 
 ### From Source
 
